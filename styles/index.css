@@ -1,0 +1,11 @@
+@import url("./globals.css");
+@import url("./Layout.module.css");
+@import url("./Header.module.css");
+@import url("./Sidebar.module.css");
+@import url("./Content.module.css");
+
+/* component css */
+@import url("../components/index.css");
+
+/* page css*/
+@import url("../pages/making/Making.module.css");
