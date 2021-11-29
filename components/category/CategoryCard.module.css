@@ -21,3 +21,7 @@
     padding: 10px;
   }
 }
+
+.dy__category-card:hover {
+  background-color: blue;
+}

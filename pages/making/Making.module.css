@@ -1,3 +1,21 @@
+.dy__category-head {
+  display: flex;
+  align-items: center;
+}
+
+.dy__category-head .dy__category-head_btn {
+  background: #4285f4;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0 20px;
+
+  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0px 2px 2px 0px rgb(0 0 0 / 14%),
+    0px 3px 1px -2px rgb(0 0 0 / 12%), 0px 1px 5px 0px rgb(0 0 0 / 20%);
+  cursor: pointer;
+}
+
 .dy__category-list {
   display: flex;
 }
