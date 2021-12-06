@@ -1,7 +1,7 @@
 import Layout from "../components/layout";
 import "../styles/index.css";
 
-import "../db/firebase";
+// import "../db/firebase";
 
 function MyApp({ Component, pageProps }) {
   return (

@@ -1,0 +1,14 @@
+.dy__category-head {
+  display: flex;
+  align-items: center;
+}
+
+.dy__category-items_head {
+  display: flex;
+  align-items: center;
+}
+
+.dy__category-list {
+  display: flex;
+  flex-wrap: wrap;
+}

@@ -1,27 +1,36 @@
-import { collection, getDocs } from "@firebase/firestore";
-import { db } from "../db/firebase";
+import useSWR from "swr";
+import exercises from "../assets/exercises.json";
 
-const categoryItemSnapshot = async () =>
-  await getDocs(collection(db, "category"));
+// const categoryItem = async (id) =>
+//   await fetch(`http://localhost:3000/api/category/${id}`).then((o) => o.json());
 
-export default function useCategoryItem({ id }) {
-  const { data, isLoading, error } = useSWR(
-    "/get/category/item",
-    categoryItemSnapshot,
+const getCategoryItem = (key, id) => {
+  return new Promise((resolve, reject) => {
+    const filteringItem = exercises.filter(
+      (exercise) => exercise.category_id === id
+    );
+    resolve(filteringItem);
+  });
+};
+
+export default function useCategoryItem(id) {
+  // const { data, isLoading, error } = useSWR(
+  //   "/get/category/item",
+  //   () => categoryItem(id),
+  //   {
+  //     focusThrottleInterval: 60000,
+  //   }
+  // );
+  const { data = [], isLoading, error } = useSWR(
+    ["/get/category/item", id],
+    getCategoryItem,
     {
       focusThrottleInterval: 60000,
     }
   );
-  const category = [];
-  if (data) {
-    const list = data.docs.map((d) => ({
-      data: d.data(),
-      key: d.id,
-    }));
-    category = [...list];
-  }
+
   return {
-    data: category,
+    data,
     isLoading,
     error,
   };

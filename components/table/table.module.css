@@ -1,0 +1,18 @@
+table {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+tr td {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+th {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+.dy__table {
+  width: 100%;
+}

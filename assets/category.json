@@ -1,0 +1,74 @@
+[
+  {
+    "num": 0,
+    "name": "가슴",
+    "desc": "대흉근 운동",
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 1,
+    "name": "등",
+    "desc": "등 운동",
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 2,
+    "name": "어깨",
+    "desc": "어깨 운동",
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 3,
+    "name": "삼두",
+    "desc": "삼두 운동",
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 4,
+    "name": "이두",
+    "desc": "이두 운동",
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 5,
+    "name": "배",
+    "desc": "배 운동",
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 6,
+    "name": "허벅지",
+    "desc": "허벅지 운동",
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 7,
+    "name": "허리",
+    "desc": "대흉근 운동",
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 8,
+    "name": "전신",
+    "desc": "전신 운동",
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  }
+]

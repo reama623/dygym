@@ -1,0 +1,83 @@
+[
+  {
+    "num": 0,
+    "name": "케이블 시티 드로우",
+    "desc": "등운동",
+    "category_id": 1,
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 1,
+    "name": "덤벨 프레스",
+    "desc": "가슴쪽 운동",
+    "category_id": 0,
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 2,
+    "name": "인클라인 머신 프레스",
+    "desc": "가슴",
+    "category_id": 0,
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 3,
+    "name": "케이블 푸쉬 다운",
+    "desc": "삼두",
+    "category_id": 3,
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 4,
+    "name": "푸쉬업",
+    "desc": "가슴",
+    "category_id": 0,
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 5,
+    "name": "렛풀 다운",
+    "desc": "등운동",
+    "category_id": 1,
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 6,
+    "name": "원암 덤벨 로우",
+    "desc": "등운동",
+    "category_id": 0,
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 7,
+    "name": "바벨컬",
+    "desc": "이두",
+    "category_id": 4,
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  },
+  {
+    "num": 8,
+    "name": "케이블 오버헤드 익스텐션",
+    "desc": "삼두",
+    "category_id": 3,
+    "createdAt": "20211205",
+    "updatedAt": "20211205",
+    "writer": "admin"
+  }
+]
