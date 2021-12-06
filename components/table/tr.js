@@ -11,7 +11,6 @@ export default function Tr({ columns, item }) {
     );
   }
   if (!item) {
-    console.log("hihi");
     return (
       <tr>
         <Td colSpan={columns.length} />

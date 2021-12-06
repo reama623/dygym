@@ -52,7 +52,7 @@ function Making() {
             <div className={classNames("dy__category-items")}>
               <div className={classNames("dy__category-items_head")}>
                 <div className={classNames("dy__category-items_head-title")}>
-                  {selectCategory.name}
+                  선택 운동 : {selectCategory.name}
                 </div>
                 <Button name="Add" handleClick={handleOpen} />
               </div>

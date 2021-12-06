@@ -3,9 +3,18 @@
   align-items: center;
 }
 
+.dy__category-head .dy__category-head_title {
+  width: 130px;
+}
+
 .dy__category-items_head {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
+}
+
+.dy__category-items_head .dy__category-items_head-title {
+  width: 130px;
 }
 
 .dy__category-list {
