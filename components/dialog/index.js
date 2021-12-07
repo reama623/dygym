@@ -1,9 +1,8 @@
 import classNames from "classnames";
 import { useEffect } from "react";
 
-export default function Dialog(props) {
-  const { open, handleClose } = props;
-
+export default function Dialog({ modal, handleClose }) {
+  const { title, component: Component } = modal;
   const outsideClick = (e) => {
     // console.log(e.target);
     if (!e.target.closest(".dy__dialog")) {
@@ -19,10 +18,21 @@ export default function Dialog(props) {
   }, []);
   return (
     <div id="modalRoot">
-      <dialog open={open} className={classNames("dy__dialog")}>
-        <div className={classNames("dy__dialog-head")}>head</div>
-        <div className={classNames("dy__dialog-content")}>content</div>
-        <div className={classNames("dy__dialog-footer")}>footer</div>
+      <dialog open={modal.isOpen} className={classNames("dy__dialog")}>
+        <div className={classNames("dy__dialog-head")}>
+          <div className={classNames("dy__dialog-head_title")}>{title}</div>
+        </div>
+        <div className={classNames("dy__dialog-content")}>
+          <Component />
+        </div>
+        <div className={classNames("dy__dialog-footer")}>
+          <div
+            className={classNames("dy__dialog-footer_cancel")}
+            onClick={handleClose}
+          >
+            <span>CANCEL</span>
+          </div>
+        </div>
       </dialog>
     </div>
   );

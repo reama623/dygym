@@ -1,6 +1,6 @@
 @media screen and (max-width: 960px) {
   .dy__category-card {
-    min-width: 80px;
+    min-width: 130px;
     height: 60px;
     background-color: rgb(185, 201, 247);
     margin: 20px;
@@ -22,7 +22,7 @@
   }
 }
 
-.dy__category-card_select{
+.dy__category-card_select {
   background-color: rgb(148, 148, 241);
 }
 
@@ -34,7 +34,7 @@
 }
 
 .dy__category-title .dy__category-title_name {
-  margin: 0 20px;
+  margin-right: 20px;
   font-weight: 500;
 }
 

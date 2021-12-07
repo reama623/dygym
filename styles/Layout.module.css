@@ -1,6 +1,17 @@
-.dy__layout {
-  display: grid;
-  grid-template-columns: 200px 3fr;
-  grid-template-rows: 58px 1fr;
-  height: 100vh;
+@media screen and (max-width: 768px) {
+  .dy__layout {
+    display: grid;
+    /* grid-template-columns: 200px 3fr; */
+    grid-template-rows: 58px 1fr;
+    height: 100vh;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .dy__layout {
+    display: grid;
+    grid-template-columns: 200px 3fr;
+    grid-template-rows: 58px 1fr;
+    height: 100vh;
+  }
 }

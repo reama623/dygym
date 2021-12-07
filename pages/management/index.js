@@ -9,14 +9,21 @@ import CategoryItemList from "./list";
 
 import useCategory from "../../effects/useCategory";
 import Button from "../../components/button";
+import CategoryAddModal from "../../components/category/categoryAddModal";
 
 function Making() {
   const { data, isLoading, error } = useCategory();
   const [selectCategory, setSelectCategory] = useState(null);
   // const { data, isLoading, error } = useCategory();
-  const [isOpen, setIsOpen] = useState(false);
-  const handleClose = (e) => setIsOpen(false);
-  const handleOpen = (e) => setIsOpen(true);
+
+  const [modal, setModal] = useState({
+    type: "category",
+    name: "",
+    isOpen: false,
+  });
+  const handleClose = (e) => setModal({ ...modal, isOpen: false });
+  const handleOpen = (e, title, component) =>
+    setModal({ ...modal, title, component, isOpen: true });
 
   const handleCardClick = (e, category) => {
     setSelectCategory(category);
@@ -36,7 +43,12 @@ function Making() {
             <div className={classNames("dy__category-head_title")}>
               운동 구분
             </div>
-            <Button name="Add" handleClick={handleOpen} />
+            <Button
+              name="Add"
+              handleClick={(e) =>
+                handleOpen(e, "새 구분 추가", CategoryAddModal)
+              }
+            />
           </div>
           <div className={classNames("dy__category-list")}>
             {data?.map((d) => (
@@ -54,16 +66,25 @@ function Making() {
                 <div className={classNames("dy__category-items_head-title")}>
                   선택 운동 : {selectCategory.name}
                 </div>
-                <Button name="Add" handleClick={handleOpen} />
+                <Button
+                  name="Add"
+                  handleClick={(e) =>
+                    handleOpen(
+                      e,
+                      `${selectCategory.name} 운동 추가`,
+                      "add-exercise"
+                    )
+                  }
+                />
               </div>
               <CategoryItemList category={selectCategory} />
             </div>
           )}
         </>
       )}
-      {isOpen && (
+      {modal.isOpen && (
         <Modal>
-          <Dialog open={isOpen} handleClose={handleClose} />
+          <Dialog modal={modal} handleClose={handleClose} />
         </Modal>
       )}
     </>

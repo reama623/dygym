@@ -17,7 +17,18 @@
   width: 130px;
 }
 
-.dy__category-list {
-  display: flex;
-  flex-wrap: wrap;
+@media screen and (min-width: 960px) {
+  .dy__category-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .dy__category-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
 }
