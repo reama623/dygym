@@ -1,27 +1,27 @@
-// import { createPool } from "mariadb";
+import { createPool, createConnection } from "mariadb";
 
-// const pool = createPool({
-//   connectionLimit: 20,
-//   host: "20.205.129.140",
-//   port: 3306,
-//   user: "dygym",
-//   password: "dygym5702",
-//   database: "dygym",
-// });
+const pool = createPool({
+  connectionLimit: 5,
+  queueLimit: 20,
+  host: "20.210.192.101",
+  port: 13306,
+  user: "admin",
+  password: "1352759",
+  database: "dygym",
+});
 
-// export async function asyncFunction(query, values) {
-//   let conn;
-//   try {
-//     conn = await pool.getConnection();
-//     const rows = await conn.query(query, values);
-//     conn.end();
-//     return rows;
-//   } catch (error) {
-//     throw error;
-//   } finally {
-//     if (conn) {
-//       console.log('hihi')
-//     }
-//   }
-// }
-// // 
+export async function asyncFunction(query, values) {
+  let conn;
+  let rows;
+  try {
+    conn = await pool.getConnection();
+    rows = await conn.query(query, values);
+
+    conn.release();
+  } catch (error) {
+    console.error("[ERROR]:[Mariadb]>>>", error);
+    conn.rollback();
+    return [];
+  }
+  return rows;
+}

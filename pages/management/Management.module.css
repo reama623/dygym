@@ -1,3 +1,6 @@
+@import url("./modal/categoryAddModal.module.css");
+@import url("./modal/exerciseAddModal.module.css");
+
 .dy__category-head {
   display: flex;
   align-items: center;
