@@ -1,4 +1,4 @@
-import { createPool, createConnection } from "mariadb";
+import { createPool } from "mariadb";
 
 const pool = createPool({
   connectionLimit: 5,

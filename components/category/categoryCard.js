@@ -1,9 +1,12 @@
 import classNames from "classnames";
 
-function CategoryCard({ item, select, handleClick }) {
+function CategoryCard({ item, select, handleClick, handleDelete }) {
   return (
     <div
-      className={classNames("dy__category-card", select && 'dy__category-card_select')}
+      className={classNames(
+        "dy__category-card",
+        select && "dy__category-card_select"
+      )}
       onClick={(e) => handleClick(e, item)}
     >
       <div className={classNames("dy__category-title")}>
@@ -12,6 +15,9 @@ function CategoryCard({ item, select, handleClick }) {
         </div>
         <div className={classNames("dy__category-title_count")}>
           {item?.count}
+        </div>
+        <div className={classNames("dy__category-btn")}>
+          <button onClick={(e) => handleDelete(e, item.num)}>x</button>
         </div>
       </div>
       <div className={classNames("dy__category-content")}>
