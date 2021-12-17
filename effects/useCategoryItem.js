@@ -1,10 +1,9 @@
+import axios from "axios";
 import useSWR from "swr";
-import exercises from "../assets/exercises.json";
+// import exercises from "../assets/exercises.json";
 
 const getCategoryItem = async (path, id) => {
-  return await fetch(`http://localhost:3000/api/category/list/${id}`).then(
-    (o) => o.json()
-  );
+  return await axios.get(`/category/list/${id}`).then(({ data }) => data);
 };
 
 // const getCategoryItem = (key, id) => {
