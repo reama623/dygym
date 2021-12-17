@@ -1,9 +1,10 @@
+import axios from "axios";
 import useSWR from "swr";
 // import category from "../assets/category.json";
 // import exercises from "../assets/exercises.json";
 
 const getCategory = async () =>
-  await fetch("http://localhost:3000/api/category").then((o) => o.json());
+  await axios.get("/category").then(({ data }) => data);
 
 // const getSampleCategory = () => {
 //   // category list + each other exercises
@@ -27,7 +28,6 @@ export default function useCategory() {
   // const { data, error } = useSWR("/get/category", getSampleCategory, {
   //   focusThrottleInterval: 60000,
   // });
-
   return {
     data,
     isLoading: !error && !data,
