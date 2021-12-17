@@ -6,7 +6,9 @@ import { RecoilRoot } from "recoil";
 import "../utils/string.util";
 import axios from "axios";
 
-axios.defaults.baseURL = `${window.origin}/api`;
+if (typeof window !== 'undefined') {
+  axios.defaults.baseURL = `${window?.origin}/api`;
+}
 
 function MyApp({ Component, pageProps }) {
   return (
