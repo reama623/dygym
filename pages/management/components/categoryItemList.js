@@ -5,7 +5,7 @@ import useCategoryItem from "../../../effects/useCategoryItem";
 
 export default function CategoryItemList() {
   const selectCategory = useRecoilValue(categoryState);
-  const { data, isLoading, error } = useCategoryItem(selectCategory.num);
+  const { data, isLoading, error } = useCategoryItem(selectCategory?.num);
   const columns = [
     { key: "num", name: "번호" },
     { key: "name", name: "운동 이름" },
