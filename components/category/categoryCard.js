@@ -9,20 +9,22 @@ function CategoryCard({ item, select, handleClick, handleDelete }) {
       )}
       onClick={(e) => handleClick(e, item)}
     >
+      <div className={classNames("dy__category-content")}>hi</div>
       <div className={classNames("dy__category-title")}>
         <div className={classNames("dy__category-title_name")}>
-          {item?.name}
+          <div>{item?.name}</div>
+          <div className={classNames("dy__category-title_count")}>
+            {item?.count}
+          </div>
         </div>
-        <div className={classNames("dy__category-title_count")}>
-          {item?.count}
-        </div>
-        <div className={classNames("dy__category-btn")}>
+
+        {/* <div className={classNames("dy__category-btn")}>
           <button onClick={(e) => handleDelete(e, item.num)}>x</button>
-        </div>
+        </div> */}
       </div>
-      <div className={classNames("dy__category-content")}>
+      {/* <div className={classNames("dy__category-content")}>
         {item?.description}
-      </div>
+      </div> */}
     </div>
   );
 }
