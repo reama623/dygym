@@ -5,6 +5,7 @@ import {
   Flex,
   useColorModeValue,
   Text,
+  Icon,
 } from "@chakra-ui/react";
 import { FiHome, FiTrendingUp, FiCompass } from "react-icons/fi";
 
