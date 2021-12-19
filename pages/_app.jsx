@@ -5,7 +5,7 @@ import { createBreakpoints } from "@chakra-ui/theme-tools";
 // import "../db/firebase";
 import "../utils/string.util";
 import axios from "axios";
-import Layout from "../components/layout";
+import Layout from "../components/layout/index";
 
 import "../styles/reset.css";
 

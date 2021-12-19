@@ -1,4 +1,6 @@
-import React from "react";
+// import React from "react";
+import Header from "./header";
+import Sidebar from "./sidebar";
 
 import {
   Box,
@@ -7,9 +9,7 @@ import {
   DrawerContent,
   useDisclosure,
 } from "@chakra-ui/react";
-import Header from "./header";
 
-import Sidebar from "./sidebar";
 
 export default function SidebarWithHeader({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
