@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 
 export default function CategoryCard({ item, handleClick }) {
-  const { num, name, count } = item;
+  const { name, count } = item;
   return (
     <Box
       borderWidth="1px"
@@ -11,6 +11,9 @@ export default function CategoryCard({ item, handleClick }) {
       m={2}
       w={["3xs"]}
       onClick={(e) => handleClick(e, item)}
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
     >
       <Box p="6">
         <Box

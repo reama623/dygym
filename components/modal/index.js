@@ -15,6 +15,7 @@ export default function Modal({
   onClose,
   children,
   handleSubmit,
+  handleDelete,
 }) {
   return (
     <ChakraModal isOpen={isOpen} onClose={onClose}>
@@ -22,7 +23,7 @@ export default function Modal({
       <ModalContent>
         <ModalHeader>
           {name}
-          <Button ml={20}>추가</Button>
+          {/* <Button ml={20}>추가</Button> */}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>{children}</ModalBody>
@@ -31,7 +32,12 @@ export default function Modal({
           <Button colorScheme="blue" mr={3} onClick={onClose}>
             Close
           </Button>
-          {handleSubmit && (
+          {handleDelete != null && (
+            <Button variant="ghost" onClick={handleDelete}>
+              Delete
+            </Button>
+          )}
+          {handleSubmit != null && (
             <Button variant="ghost" onClick={handleSubmit}>
               Submit
             </Button>

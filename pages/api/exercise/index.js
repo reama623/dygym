@@ -1,9 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import { asyncFunction } from "../../../db/mariadb";
+import { asyncFunction } from "../../../db/mysql";
 
 export default async function handler(req, res) {
-  const { body } = req;
+  const { body, query } = req;
 
   if (req.method === "POST") {
     const { id, name, desc } = body;
