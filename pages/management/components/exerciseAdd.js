@@ -7,7 +7,7 @@ export default function ExerciseAdd({ category, handleCategory }) {
         <Input
           placeholder="이름 입력"
           name="name"
-          value={category.name}
+          value={category?.name}
           onChange={handleCategory}
         />
       </Box>
@@ -15,7 +15,7 @@ export default function ExerciseAdd({ category, handleCategory }) {
         <Input
           placeholder="설명 입력"
           name="desc"
-          value={category.desc}
+          value={category?.desc}
           onChange={handleCategory}
         />
       </Box>
