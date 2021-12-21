@@ -9,20 +9,20 @@ export default async function handler(req, res) {
 
   if (req.method === "POST") {
     const { name, desc } = body;
-    const { data } = await apiAxios().post("/category/create", { name, desc });
+    const { data } = await apiAxios().post("/category", { name, desc });
     return res.status(200).json(data);
   }
 
   if (req.method === "DELETE") {
-    const { num } = query;
-    const { data } = await apiAxios().delete(`/category/delete/${num}`);
+    const { id } = query;
+    const { data } = await apiAxios().delete(`/category/${id}`);
     return res.status(200).json(data);
   }
 
   if (req.method === "PATCH") {
-    const { num } = query;
+    const { id } = query;
     const { name, desc } = body;
-    const { data } = await apiAxios.patch(`/category/patch/${num}`, {
+    const { data } = await apiAxios.patch(`/category/${id}`, {
       name,
       description: desc,
     });

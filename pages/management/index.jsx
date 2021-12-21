@@ -73,8 +73,8 @@ export default function Management() {
     }
   };
 
-  const deleteCategory = async (e, num) => {
-    await axios.delete(`/category?num=${num}`);
+  const deleteCategory = async (e, id) => {
+    await axios.delete(`/category?id=${id}`);
     mutate("/get/category");
     setModal({
       ...modal,
@@ -84,7 +84,7 @@ export default function Management() {
 
   const handleDelete = (e) => {
     if (modal.type === "view") {
-      return (e) => deleteCategory(e, modal.num);
+      return (e) => deleteCategory(e, modal.id);
     }
   };
 
@@ -104,7 +104,7 @@ export default function Management() {
           {!isLoading &&
             data.map((d) => (
               <CategoryCard
-                key={d.num}
+                key={d.id}
                 item={d}
                 handleClick={handleCategoryClick}
               />
@@ -117,7 +117,7 @@ export default function Management() {
         handleSubmit={handleSubmit()}
         handleDelete={handleDelete()}
       >
-        {modal.type === "view" && <ExerciseList id={modal.num} />}
+        {modal.type === "view" && <ExerciseList id={modal.id} />}
         {modal.type === "add" && (
           <ExerciseAdd category={category} handleCategory={handleCategory} />
         )}
