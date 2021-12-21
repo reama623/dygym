@@ -1,38 +1,31 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-
-import { asyncFunction } from "../../../db/mysql";
+import { apiAxios } from "../../../core/api";
 
 export default async function handler(req, res) {
   const { query, body } = req;
   if (req.method === "GET") {
-    // const data = await asyncFunction("select * from category");
-    const data = await asyncFunction(
-      `select c.num, c.name, count(e.category_id) as \`count\` from category c left join exercise e on e.category_id = c.num group by c.num`
-    );
+    const { data } = await apiAxios().get("/category/all");
     return res.status(200).json(data);
   }
 
   if (req.method === "POST") {
     const { name, desc } = body;
-    const data = await asyncFunction(
-      "insert into category(name, description) values(?,?)",
-      [name, desc]
-    );
+    const { data } = await apiAxios().post("/category/create", { name, desc });
     return res.status(200).json(data);
   }
 
   if (req.method === "DELETE") {
     const { num } = query;
-    const data = await asyncFunction(`delete from category where num=${num}`);
+    const { data } = await apiAxios().delete(`/category/delete/${num}`);
     return res.status(200).json(data);
   }
 
   if (req.method === "PATCH") {
+    const { num } = query;
     const { name, desc } = body;
-    const data = await asyncFunction(
-      "insert into category(name, description) values(?,?)",
-      [name, desc]
-    );
+    const { data } = await apiAxios.patch(`/category/patch/${num}`, {
+      name,
+      description: desc,
+    });
     return res.status(200).json(data);
   }
 }

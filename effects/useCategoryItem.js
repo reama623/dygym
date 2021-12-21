@@ -23,17 +23,16 @@ export default function useCategoryItem(id) {
   //     focusThrottleInterval: 60000,
   //   }
   // );
-  const { data, isLoading, error } = useSWR(
+  const { data, isValidating, error } = useSWR(
     ["/get/category/list", id],
     (url) => getCategoryItem(url, id),
     {
       focusThrottleInterval: 60000,
     }
   );
-
   return {
     data,
-    isLoading: !error && !data,
+    isLoading: isValidating,
     error,
   };
 }
