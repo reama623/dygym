@@ -25,14 +25,27 @@ const setObj = {
 };
 
 export default function MakingView({ list, handleDelete }) {
-  if (!list.length) {
-    return "no item";
-  }
   const [sets, setSets] = useState([]);
 
   const [modal, setModal] = useState({
     isOpen: false,
   });
+
+  useEffect(() => {
+    const items = list.map(({ id, ...rest }) => {
+      const findSet = sets.find((s) => s.id === id);
+      return {
+        id,
+        info: { ...rest },
+        list: findSet ? [...findSet.list] : [],
+      };
+    });
+    setSets([...items]);
+  }, [list]);
+
+  if (!list?.length) {
+    return "no item";
+  }
 
   const handleModalClose = (e) => setModal({ ...modal, isOpen: false });
 
@@ -87,18 +100,6 @@ export default function MakingView({ list, handleDelete }) {
       name: "만들어진 운동",
     });
   };
-
-  useEffect(() => {
-    const items = list.map(({ id, ...rest }) => {
-      const findSet = sets.find((s) => s.id === id);
-      return {
-        id,
-        info: { ...rest },
-        list: findSet ? [...findSet.list] : [],
-      };
-    });
-    setSets([...items]);
-  }, [list]);
   // console.log(sets);
   return (
     <>
