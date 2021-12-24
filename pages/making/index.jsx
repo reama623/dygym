@@ -1,13 +1,4 @@
-import {
-  Grid,
-  GridItem,
-  ListItem,
-  List,
-  Box,
-  Alert,
-  AlertIcon,
-  Modal,
-} from "@chakra-ui/react";
+import { Grid, GridItem, ListItem, List, Box } from "@chakra-ui/react";
 import { useState } from "react";
 import useCategory from "../../effects/useCategory";
 import ExerciseView from "./exerciseView";
@@ -110,14 +101,6 @@ export default function Making() {
           <MakingView list={list} handleDelete={handleDeleteListItem} />
         </GridItem>
       </Grid>
-      <Modal
-      // {...modal}
-      // onClose={handleModalClose}
-      // handleSubmit={handleSubmit()}
-      // handleDelete={handleDelete()}
-      >
-        <Box>aa</Box>
-      </Modal>
     </>
   );
 }
