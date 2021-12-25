@@ -1,6 +1,7 @@
 import { Box, HStack, VStack } from "@chakra-ui/react";
 
 export default function MakingExerciseDialog({ sets }) {
+  console.log('making dialog 22 >>', sets)
   if (!sets) {
     return <Box>No Sets</Box>;
   }

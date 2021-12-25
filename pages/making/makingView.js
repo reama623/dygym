@@ -6,8 +6,11 @@ import {
   AccordionPanel,
   Box,
   Button,
+  Code,
   HStack,
   Input,
+  List,
+  ListItem,
   VStack,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
@@ -100,6 +103,10 @@ export default function MakingView({ list, handleDelete }) {
       name: "만들어진 운동",
     });
   };
+
+  const handleClipboard = (e) => {
+    alert("clip board 저장 준비중");
+  };
   // console.log(sets);
   return (
     <>
@@ -123,7 +130,11 @@ export default function MakingView({ list, handleDelete }) {
                       <Box flex="1" textAlign="left">
                         {l.name}
                       </Box>
-                      <Button size="sm" onClick={(e) => handleDelete(e, l)}>
+                      <Button
+                        as="div"
+                        size="sm"
+                        onClick={(e) => handleDelete(e, l)}
+                      >
                         x
                       </Button>
                     </HStack>
@@ -186,10 +197,46 @@ export default function MakingView({ list, handleDelete }) {
       <Modal
         {...modal}
         onClose={handleModalClose}
-        // handleSubmit={handleSubmit()}
+        handleSubmit={handleClipboard}
         // handleDelete={handleDelete()}
       >
-        <MakingExerciseDialog sets={sets} />
+        {/* <MakingExerciseDialog sets={sets} /> */}
+        {sets?.map((set) => (
+          <List key={set.id} mb={3}>
+            {set?.list?.map((l) => (
+              <ListItem key={l.id}>
+                {set.info?.name} {l.count} 회 {l.weight} kg
+              </ListItem>
+            ))}
+          </List>
+          // <VStack key={set.id}>
+          //   <Box w="full" textAlign="left">
+          //     {set.info.name}
+          //   </Box>
+          //   <Box w="full">
+          //     <Table>
+          //       <Thead>
+          //         <Tr>
+          //           <Th>무게</Th>
+          //           <Th>횟수</Th>
+          //           <Th>설명</Th>
+          //         </Tr>
+          //       </Thead>
+          //       <Tbody>
+          //         {set?.list?.map((l) => (
+          //           <Tr key={l.id}>
+          //             <Td>{l.weight} kg</Td>
+          //             <Td>{l.count} 회</Td>
+          //             <Td>{l.desc}</Td>
+          //           </Tr>
+          //         ))}
+          //       </Tbody>
+          //     </Table>
+          //   </Box>
+          // </VStack>
+        ))}
+        <Box fontWeight={700}>저장 데이터 샘플</Box>
+        <Code w="full">{JSON.stringify(sets)}</Code>
       </Modal>
     </>
   );
