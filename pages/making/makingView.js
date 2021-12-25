@@ -19,7 +19,7 @@ import Modal from "../../components/modal";
 
 import { randomID } from "../../core/utils/dic";
 
-import MakingExerciseDialog from "./components/MakingExerciseDialog";
+// import MakingExerciseDialog from "./components/makingExerciseDialog";
 
 const setObj = {
   count: "",
