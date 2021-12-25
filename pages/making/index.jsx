@@ -65,7 +65,7 @@ export default function Making() {
             </ListItem>
           </List>
         </GridItem>
-        <GridItem colSpan={2} bg="papayawhip" p="3" h="200" overflowY="scroll">
+        <GridItem colSpan={2} p="3" h="200" overflowY="scroll">
           <Box display="flex" flexWrap="wrap" justifyContent="space-between">
             {isLoading && "Loading..."}
             {!isLoading &&
@@ -85,7 +85,7 @@ export default function Making() {
         </GridItem>
         <GridItem
           colSpan={2}
-          bg="papayawhip"
+          // bg="papayawhip"
           h="200"
           overflowY="scroll"
           flexWrap="wrap"
@@ -97,7 +97,7 @@ export default function Making() {
             />
           )}
         </GridItem>
-        <GridItem colSpan={4} rowSpan={4} bg="tomato" overflowY="scroll">
+        <GridItem colSpan={4} rowSpan={4} overflowY="scroll">
           <MakingView list={list} handleDelete={handleDeleteListItem} />
         </GridItem>
       </Grid>

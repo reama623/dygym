@@ -82,7 +82,10 @@ export default function MakingView({ list, handleDelete }) {
 
   const handleSet = (e, setId, item) => {
     const { name } = e.target;
-    let value = e.target.value.replace(/[^0-9]/, "");
+    let value = e.target.value;
+    if (name !== "desc") {
+      value = e.target.value.replace(/[^0-9]/, "");
+    }
     const copySets = [...sets];
 
     const findExerciseIndex = copySets.findIndex((set) => set.id === setId);
