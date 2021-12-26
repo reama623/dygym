@@ -15,14 +15,17 @@ import useCategoryItem from "../../../effects/useCategoryItem";
 import axios from "axios";
 import { useSWRConfig } from "swr";
 
+const newExerciseObj = (index) => {
+  return {
+    [`name-${index}`]: "",
+    [`desc-${index}`]: "",
+  };
+};
+
 export default function ExerciseList({ id }) {
   const { mutate } = useSWRConfig();
   const [flag, setFlag] = useState(false);
-  const [exercise, setExercise] = useState({
-    id,
-    name: "",
-    desc: "",
-  });
+  const [exercise, setExercise] = useState([]);
   const [updateExercise, setUpdateExercise] = useState({
     flag: false,
     id: 0,
@@ -32,7 +35,9 @@ export default function ExerciseList({ id }) {
 
   const { data, isLoading, error } = useCategoryItem(id);
   const addExercise = () => {
-    setFlag(true);
+    const newExerciseList = [...exercise];
+    newExerciseList.push({ ...newExerciseObj(exercise.length) });
+    setExercise([...newExerciseList]);
   };
   const deleteExercise = async (e, item) => {
     await axios.delete(`/exercise?id=${item.id}`);
@@ -70,29 +75,30 @@ export default function ExerciseList({ id }) {
     });
   };
 
-  const handleAddExercise = (e) => {
+  const handleAddExercise = (e, index) => {
     const { name, value } = e.target;
-    setExercise({
-      ...exercise,
-      [name]: value,
-    });
+    const copyExercise = [...exercise];
+    copyExercise[index][name] = value;
+    setExercise([...copyExercise]);
   };
 
-  const handleAddSubmit = async () => {
-    await axios.post("/exercise", { ...exercise });
+  const handleAddSubmit = async (e, index) => {
+    const convertParams = {
+      id,
+      name: exercise[index][`name-${index}`],
+      desc: exercise[index][`desc-${index}`],
+    };
+    await axios.post("/exercise", { ...convertParams });
 
     mutate("/get/category");
     mutate(["/get/category/list", id]);
-    handleAddCancel();
+    handleAddCancel(e, index);
   };
 
-  const handleAddCancel = () => {
-    setFlag(false);
-    setExercise({
-      ...exercise,
-      name: "",
-      desc: "",
-    });
+  const handleAddCancel = (e, index) => {
+    const copyExercise = [...exercise];
+    copyExercise.splice(index, 1);
+    setExercise([...copyExercise]);
   };
   return (
     <VStack>
@@ -109,29 +115,34 @@ export default function ExerciseList({ id }) {
             </Tr>
           </Thead>
           <Tbody>
-            {isLoading && (
+            {/* {isLoading && (
               <Tr>
                 <Td colSpan={3}>Loading...</Td>
               </Tr>
-            )}
-            {flag && (
-              <>
-                <Tr p={10}>
+            )} */}
+            {exercise.length > 0 &&
+              exercise.map((ex, i) => (
+                <Tr key={i} p={10}>
                   <Td colSpan={3}>
                     <Box display="flex" alignItems="center" mb={2}>
                       <Input
                         placeholder="이름 입력"
-                        name="name"
-                        value={exercise.name}
-                        onChange={handleAddExercise}
+                        name={`name-${i}`}
+                        value={ex[`name-${i}`]}
+                        onChange={(e) => handleAddExercise(e, i)}
                       />
-                      <Button size="xs" mr={2} ml={2} onClick={handleAddSubmit}>
+                      <Button
+                        size="xs"
+                        mr={2}
+                        ml={2}
+                        onClick={(e) => handleAddSubmit(e, i)}
+                      >
                         o
                       </Button>
                       <Button
                         colorScheme="red"
                         size="xs"
-                        onClick={handleAddCancel}
+                        onClick={(e) => handleAddCancel(i)}
                       >
                         x
                       </Button>
@@ -139,17 +150,16 @@ export default function ExerciseList({ id }) {
                     <Box>
                       <Input
                         placeholder="설명 입력"
-                        name="desc"
-                        value={exercise.desc}
-                        onChange={handleAddExercise}
+                        name={`desc-${i}`}
+                        value={ex[`desc-${i}`]}
+                        onChange={(e) => handleAddExercise(e, i)}
                       />
                     </Box>
                   </Td>
                 </Tr>
-              </>
-            )}
-            {!isLoading && data.length > 0
-              ? data.map((d) => (
+              ))}
+            {data?.length > 0
+              ? data?.map((d) => (
                   <Tr key={d.id}>
                     {updateExercise.flag && updateExercise.id === d.id ? (
                       <Td>

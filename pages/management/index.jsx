@@ -1,4 +1,12 @@
-import { Box, VStack, Heading, Button, Input } from "@chakra-ui/react";
+import {
+  Box,
+  VStack,
+  Heading,
+  Button,
+  Input,
+  Spinner,
+  HStack,
+} from "@chakra-ui/react";
 import { CategoryCard } from "../../components/card";
 import useCategory from "../../effects/useCategory";
 
@@ -93,16 +101,20 @@ export default function Management() {
       <VStack spacing={3} alignItems="flex-start">
         <Box ml={2}>
           <Heading as="h2" alignItems="left">
-            {`운동 관리 > 분류`}
-            <Button ml={2} colorScheme="blue" onClick={handleAddClick}>
-              추가
-            </Button>
+            <HStack>
+              <Box>
+                {`운동 관리 > 분류`}
+                {isLoading && <Spinner />}
+              </Box>
+              <Button ml={2} colorScheme="blue" onClick={handleAddClick}>
+                추가
+              </Button>
+            </HStack>
           </Heading>
         </Box>
         <Box display="flex" flexWrap="wrap">
-          {isLoading && "Loading..."}
-          {!isLoading &&
-            data.map((d) => (
+          {data?.length > 0 &&
+            data?.map((d) => (
               <CategoryCard
                 key={d.id}
                 item={d}
