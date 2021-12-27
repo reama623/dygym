@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 
 export default function CategoryCard({ item, handleClick }) {
-  const { name, count } = item;
+  const { title, count } = item;
   return (
     <Box
       borderWidth="1px"
@@ -23,7 +23,7 @@ export default function CategoryCard({ item, handleClick }) {
           lineHeight="tight"
           isTruncated
         >
-          {name}
+          {title}
         </Box>
 
         <Box display="flex" mt="2" alignItems="center">

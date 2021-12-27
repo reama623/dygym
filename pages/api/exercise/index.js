@@ -6,9 +6,9 @@ export default async function handler(req, res) {
   const { body, query } = req;
 
   if (req.method === "POST") {
-    const { id, name, desc } = body;
+    const { id, title, desc } = body;
     const { data } = await apiAxios().post(`/exercise/${id}`, {
-      name,
+      title,
       desc,
     });
     return res.status(200).json(data);

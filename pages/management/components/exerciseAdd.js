@@ -6,8 +6,8 @@ export default function ExerciseAdd({ category, handleCategory }) {
       <Box w="full" display="flex" alignItems="center" mb={2}>
         <Input
           placeholder="이름 입력"
-          name="name"
-          value={category?.name}
+          name="title"
+          value={category?.title}
           onChange={handleCategory}
         />
       </Box>

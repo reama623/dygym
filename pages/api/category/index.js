@@ -8,8 +8,8 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    const { name, desc } = body;
-    const { data } = await apiAxios().post("/category", { name, desc });
+    const { title, desc } = body;
+    const { data } = await apiAxios().post("/category", { title, desc });
     return res.status(200).json(data);
   }
 

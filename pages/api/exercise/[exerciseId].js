@@ -6,10 +6,10 @@ export default async function handler(req, res) {
   const { query, body } = req;
 
   if (req.method === "PATCH") {
-    const { id, name, desc } = body;
+    const { id, title, desc } = body;
     const { exerciseId } = query;
     const { data } = await apiAxios().patch(`/exercise/${exerciseId}`, {
-      name,
+      title,
       desc,
     });
     return res.status(200).json(data);

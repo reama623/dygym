@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 
 export default function Modal({
-  name,
+  title,
   isOpen,
   onClose,
   children,
@@ -22,7 +22,7 @@ export default function Modal({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {name}
+          {title}
           {/* <Button ml={20}>추가</Button> */}
         </ModalHeader>
         <ModalCloseButton />

@@ -17,7 +17,7 @@ import { useSWRConfig } from "swr";
 
 const newExerciseObj = (index) => {
   return {
-    [`name-${index}`]: "",
+    [`title-${index}`]: "",
     [`desc-${index}`]: "",
   };
 };
@@ -29,7 +29,7 @@ export default function ExerciseList({ id }) {
   const [updateExercise, setUpdateExercise] = useState({
     flag: false,
     id: 0,
-    name: "",
+    title: "",
     desc: "",
   });
 
@@ -46,11 +46,11 @@ export default function ExerciseList({ id }) {
   };
 
   const handleUpdateExercise = (e, item) => {
-    const { id, name, desc } = item;
+    const { id, title, desc } = item;
     setUpdateExercise({
       flag: true,
       id: id,
-      name,
+      title,
       desc,
     });
   };
@@ -58,19 +58,19 @@ export default function ExerciseList({ id }) {
     setUpdateExercise({
       flag: false,
       id: 0,
-      name: "",
+      title: "",
       desc: "",
     });
   };
 
   const handleUpdateSubmit = async () => {
-    const { id: exId, name, desc } = updateExercise;
-    await axios.patch(`/exercise/${exId}`, { name, desc });
+    const { id: exId, title, desc } = updateExercise;
+    await axios.patch(`/exercise/${exId}`, { title, desc });
     mutate(["/get/category/list", id]);
     setUpdateExercise({
       flag: false,
       id: 0,
-      name: "",
+      title: "",
       desc: "",
     });
   };
@@ -85,7 +85,7 @@ export default function ExerciseList({ id }) {
   const handleAddSubmit = async (e, index) => {
     const convertParams = {
       id,
-      name: exercise[index][`name-${index}`],
+      title: exercise[index][`title-${index}`],
       desc: exercise[index][`desc-${index}`],
     };
     await axios.post("/exercise", { ...convertParams });
@@ -105,21 +105,9 @@ export default function ExerciseList({ id }) {
       <Button w="full" onClick={addExercise}>
         추가
       </Button>
-      <Box w="full" h="xl" overflowY="scroll">
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>이름</Th>
-              <Th>설명</Th>
-              <Th></Th>
-            </Tr>
-          </Thead>
+      <Box w="full" overflowY="scroll">
+        <Table>
           <Tbody>
-            {/* {isLoading && (
-              <Tr>
-                <Td colSpan={3}>Loading...</Td>
-              </Tr>
-            )} */}
             {exercise.length > 0 &&
               exercise.map((ex, i) => (
                 <Tr key={i} p={10}>
@@ -127,8 +115,8 @@ export default function ExerciseList({ id }) {
                     <Box display="flex" alignItems="center" mb={2}>
                       <Input
                         placeholder="이름 입력"
-                        name={`name-${i}`}
-                        value={ex[`name-${i}`]}
+                        name={`title-${i}`}
+                        value={ex[`title-${i}`]}
                         onChange={(e) => handleAddExercise(e, i)}
                       />
                       <Button
@@ -158,30 +146,48 @@ export default function ExerciseList({ id }) {
                   </Td>
                 </Tr>
               ))}
+          </Tbody>
+        </Table>
+      </Box>
+      <Box w="full" h="xl" overflowY="scroll">
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th>이름</Th>
+              <Th>설명</Th>
+              <Th></Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {/* {isLoading && (
+              <Tr>
+                <Td colSpan={3}>Loading...</Td>
+              </Tr>
+            )} */}
             {data?.length > 0
               ? data?.map((d) => (
                   <Tr key={d.id}>
                     {updateExercise.flag && updateExercise.id === d.id ? (
                       <Td>
                         <Input
-                          name="name"
-                          value={updateExercise.name}
+                          name="title"
+                          value={updateExercise.title}
                           onChange={(e) =>
                             setUpdateExercise({
                               ...updateExercise,
-                              name: e.target.value,
+                              title: e.target.value,
                             })
                           }
                         />
                       </Td>
                     ) : (
-                      <Td>{d.name}</Td>
+                      <Td>{d.title}</Td>
                     )}
                     {updateExercise.flag && updateExercise.id === d.id ? (
                       <Td>
                         <Input
                           size="sm"
-                          name="name"
+                          name="title"
                           value={updateExercise.desc}
                           onChange={(e) =>
                             setUpdateExercise({

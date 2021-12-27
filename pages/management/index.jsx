@@ -21,7 +21,7 @@ export default function Management() {
   const { data, isLoading, error } = useCategory();
 
   const [category, setCategory] = useState({
-    name: "",
+    title: "",
     desc: "",
   });
 
@@ -52,7 +52,7 @@ export default function Management() {
     setModal({
       ...modal,
       isOpen: true,
-      name: "운동 분류 추가",
+      title: "운동 분류 추가",
       type: "add",
     });
   };
@@ -65,7 +65,7 @@ export default function Management() {
       isOpen: false,
     });
     setCategory({
-      name: "",
+      title: "",
       desc: "",
     });
     mutate("/get/category");
