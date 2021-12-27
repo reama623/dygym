@@ -120,77 +120,76 @@ export default function MakingView({ list, handleDelete }) {
       </Box>
       <VStack alignItems="flex-start">
         <Accordion defaultIndex={[0]} allowMultiple w="full">
-          {!list.length && "No Item"}
-          {list.length > 0 &&
-            list.map((l) => (
-              <AccordionItem key={l.id} mb={3} m={2}>
-                <h2>
-                  <AccordionButton backgroundColor="gray.300" borderRadius={5}>
+          {!list?.length && "No Item"}
+          {list?.map((l) => (
+            <AccordionItem key={l.id} mb={3} m={2}>
+              <h2>
+                <AccordionButton backgroundColor="gray.300" borderRadius={5}>
+                  <HStack>
+                    <Box flex="1" textAlign="left">
+                      {l.title}
+                    </Box>
+                    <Button
+                      as="div"
+                      size="sm"
+                      onClick={(e) => handleDelete(e, l)}
+                    >
+                      x
+                    </Button>
+                  </HStack>
+                  <AccordionIcon alignItems="flex-end" />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4} backgroundColor="white">
+                <VStack>
+                  <Box>
                     <HStack>
-                      <Box flex="1" textAlign="left">
-                        {l.title}
-                      </Box>
-                      <Button
-                        as="div"
-                        size="sm"
-                        onClick={(e) => handleDelete(e, l)}
-                      >
-                        x
+                      <Box>set별로 설정하세요</Box>
+                      <Button onClick={(e) => handleAddExerciseSet(e, l)}>
+                        set 추가
                       </Button>
                     </HStack>
-                    <AccordionIcon alignItems="flex-end" />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel pb={4} backgroundColor="white">
+                  </Box>
                   <VStack>
-                    <Box>
-                      <HStack>
-                        <Box>set별로 설정하세요</Box>
-                        <Button onClick={(e) => handleAddExerciseSet(e, l)}>
-                          set 추가
-                        </Button>
-                      </HStack>
-                    </Box>
-                    <VStack>
-                      {sets.length > 0 &&
-                        sets
-                          .find((s) => s.id === l.id)
-                          ?.list.map((ll, index) => (
-                            <HStack key={index}>
-                              <Box w="full">set {index + 1}</Box>
-                              <Input
-                                placeholder="무게"
-                                name="weight"
-                                value={ll.weight}
-                                onChange={(e) => handleSet(e, l.id, ll)}
-                              />
-                              <Input
-                                placeholder="횟수"
-                                name="count"
-                                value={ll.count}
-                                onChange={(e) => handleSet(e, l.id, ll)}
-                              />
-                              <Input
-                                placeholder="설명"
-                                name="desc"
-                                value={ll.desc}
-                                onChange={(e) => handleSet(e, l.id, ll)}
-                              />
-                              <Button
-                                size="sm"
-                                onClick={(e) =>
-                                  handleDeleteExerciseSet(e, l.id, ll)
-                                }
-                              >
-                                x
-                              </Button>
-                            </HStack>
-                          ))}
-                    </VStack>
+                    {sets.length > 0 &&
+                      sets
+                        .find((s) => s.id === l.id)
+                        ?.list.map((ll, index) => (
+                          <HStack key={index}>
+                            <Box w="full">set {index + 1}</Box>
+                            <Input
+                              placeholder="무게"
+                              name="weight"
+                              value={ll.weight}
+                              onChange={(e) => handleSet(e, l.id, ll)}
+                            />
+                            <Input
+                              placeholder="횟수"
+                              name="count"
+                              value={ll.count}
+                              onChange={(e) => handleSet(e, l.id, ll)}
+                            />
+                            <Input
+                              placeholder="설명"
+                              name="desc"
+                              value={ll.desc}
+                              onChange={(e) => handleSet(e, l.id, ll)}
+                            />
+                            <Button
+                              size="sm"
+                              onClick={(e) =>
+                                handleDeleteExerciseSet(e, l.id, ll)
+                              }
+                            >
+                              x
+                            </Button>
+                          </HStack>
+                        ))}
                   </VStack>
-                </AccordionPanel>
-              </AccordionItem>
-            ))}
+                </VStack>
+              </AccordionPanel>
+            </AccordionItem>
+          ))}
         </Accordion>
       </VStack>
 
@@ -207,7 +206,7 @@ export default function MakingView({ list, handleDelete }) {
             <List key={set.id} mb={3}>
               {set?.list?.map((l, index) => (
                 <ListItem key={l.id}>
-                  {index+1}set - {l.count} 회 {l.weight} kg
+                  {index + 1}set - {l.count} 회 {l.weight} kg
                 </ListItem>
               ))}
             </List>

@@ -7,7 +7,7 @@ export default function ExerciseView({ category, handleClick }) {
   //   return <div>Loading...</div>;
   // }
 
-  if (!isLoading && !exercises?.length) {
+  if (!exercises?.length) {
     return (
       <Box m={2} p={3} backgroundColor="gray.200" borderRadius={5}>
         운동이 없습니다

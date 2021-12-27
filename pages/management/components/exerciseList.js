@@ -14,11 +14,13 @@ import {
 import useCategoryItem from "../../../effects/useCategoryItem";
 import axios from "axios";
 import { useSWRConfig } from "swr";
+import { randomID } from "../../../core/utils/dic";
 
-const newExerciseObj = (index) => {
+const newExerciseObj = (eid) => {
   return {
-    [`title-${index}`]: "",
-    [`desc-${index}`]: "",
+    id: eid,
+    [`title-${eid}`]: "",
+    [`desc-${eid}`]: "",
   };
 };
 
@@ -36,7 +38,7 @@ export default function ExerciseList({ id }) {
   const { data, isLoading, error } = useCategoryItem(id);
   const addExercise = () => {
     const newExerciseList = [...exercise];
-    newExerciseList.push({ ...newExerciseObj(exercise.length) });
+    newExerciseList.push({ ...newExerciseObj(randomID()) });
     setExercise([...newExerciseList]);
   };
   const deleteExercise = async (e, item) => {
@@ -77,27 +79,32 @@ export default function ExerciseList({ id }) {
 
   const handleAddExercise = (e, index) => {
     const { name, value } = e.target;
+    const [key, id] = name.split("-");
     const copyExercise = [...exercise];
-    copyExercise[index][name] = value;
+    const findExercise = copyExercise.find((ex) => ex.id === id);
+    findExercise[name] = value;
     setExercise([...copyExercise]);
   };
 
-  const handleAddSubmit = async (e, index) => {
+  const handleAddSubmit = async (e, eid) => {
+    // console.log(exercise)
+    const findExercise = exercise.find((ex) => ex.id === eid);
     const convertParams = {
       id,
-      title: exercise[index][`title-${index}`],
-      desc: exercise[index][`desc-${index}`],
+      title: findExercise[`title-${eid}`],
+      desc: findExercise[`desc-${eid}`],
     };
     await axios.post("/exercise", { ...convertParams });
 
     mutate("/get/category");
     mutate(["/get/category/list", id]);
-    handleAddCancel(e, index);
+    handleAddCancel(e, id);
   };
 
-  const handleAddCancel = (e, index) => {
-    const copyExercise = [...exercise];
-    copyExercise.splice(index, 1);
+  const handleAddCancel = (e, id) => {
+    const copyExercise = [...exercise]
+    const findExerciseIndex = exercise.findIndex((ex) => ex.id === id);
+    copyExercise.splice(findExerciseIndex, 1);
     setExercise([...copyExercise]);
   };
   return (
@@ -115,22 +122,22 @@ export default function ExerciseList({ id }) {
                     <Box display="flex" alignItems="center" mb={2}>
                       <Input
                         placeholder="이름 입력"
-                        name={`title-${i}`}
-                        value={ex[`title-${i}`]}
-                        onChange={(e) => handleAddExercise(e, i)}
+                        name={`title-${ex.id}`}
+                        value={ex[`title-${ex.id}`]}
+                        onChange={(e) => handleAddExercise(e, ex.id)}
                       />
                       <Button
                         size="xs"
                         mr={2}
                         ml={2}
-                        onClick={(e) => handleAddSubmit(e, i)}
+                        onClick={(e) => handleAddSubmit(e, ex.id)}
                       >
                         o
                       </Button>
                       <Button
                         colorScheme="red"
                         size="xs"
-                        onClick={(e) => handleAddCancel(i)}
+                        onClick={(e) => handleAddCancel(ex.id)}
                       >
                         x
                       </Button>
@@ -138,9 +145,9 @@ export default function ExerciseList({ id }) {
                     <Box>
                       <Input
                         placeholder="설명 입력"
-                        name={`desc-${i}`}
-                        value={ex[`desc-${i}`]}
-                        onChange={(e) => handleAddExercise(e, i)}
+                        name={`desc-${ex.id}`}
+                        value={ex[`desc-${ex.id}`]}
+                        onChange={(e) => handleAddExercise(e, ex.id)}
                       />
                     </Box>
                   </Td>
