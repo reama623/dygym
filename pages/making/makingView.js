@@ -46,10 +46,6 @@ export default function MakingView({ list, handleDelete }) {
     setSets([...items]);
   }, [list]);
 
-  if (!list?.length) {
-    return "no item";
-  }
-
   const handleModalClose = (e) => setModal({ ...modal, isOpen: false });
 
   const handleAddExerciseSet = (e, item) => {
@@ -103,7 +99,7 @@ export default function MakingView({ list, handleDelete }) {
     setModal({
       ...modal,
       isOpen: true,
-      name: "만들어진 운동",
+      title: "만들어진 운동",
     });
   };
 
@@ -113,17 +109,18 @@ export default function MakingView({ list, handleDelete }) {
   // console.log(sets);
   return (
     <>
+      <Box ml={4} mt={3}>
+        <HStack justifyContent="flex-start">
+          <Box>회원 {format(new Date(), "yyyy-MM-dd")}의 운동</Box>
+          <Button size="sm">전체 운동 요약</Button>
+          <Button size="sm" onClick={handleSubmit}>
+            오늘의 운동 만들기
+          </Button>
+        </HStack>
+      </Box>
       <VStack alignItems="flex-start">
-        <Box ml={4} mt={3}>
-          <HStack justifyContent="space-between">
-            <Box>회원 {format(new Date(), "yyyy-MM-dd")}의 운동</Box>
-            <Button size="sm">전체 운동 요약</Button>
-            <Button size="sm" onClick={handleSubmit}>
-              오늘의 운동 만들기
-            </Button>
-          </HStack>
-        </Box>
         <Accordion defaultIndex={[0]} allowMultiple w="full">
+          {!list.length && "No Item"}
           {list.length > 0 &&
             list.map((l) => (
               <AccordionItem key={l.id} mb={3} m={2}>
@@ -131,7 +128,7 @@ export default function MakingView({ list, handleDelete }) {
                   <AccordionButton backgroundColor="gray.300" borderRadius={5}>
                     <HStack>
                       <Box flex="1" textAlign="left">
-                        {l.name}
+                        {l.title}
                       </Box>
                       <Button
                         as="div"
@@ -160,7 +157,7 @@ export default function MakingView({ list, handleDelete }) {
                           .find((s) => s.id === l.id)
                           ?.list.map((ll, index) => (
                             <HStack key={index}>
-                              <Box>set</Box>
+                              <Box w="full">set {index + 1}</Box>
                               <Input
                                 placeholder="무게"
                                 name="weight"
@@ -205,13 +202,16 @@ export default function MakingView({ list, handleDelete }) {
       >
         {/* <MakingExerciseDialog sets={sets} /> */}
         {sets?.map((set) => (
-          <List key={set.id} mb={3}>
-            {set?.list?.map((l) => (
-              <ListItem key={l.id}>
-                {set.info?.name} {l.count} 회 {l.weight} kg
-              </ListItem>
-            ))}
-          </List>
+          <>
+            <Box>{set.info?.title}</Box>
+            <List key={set.id} mb={3}>
+              {set?.list?.map((l, index) => (
+                <ListItem key={l.id}>
+                  {index+1}set - {l.count} 회 {l.weight} kg
+                </ListItem>
+              ))}
+            </List>
+          </>
           // <VStack key={set.id}>
           //   <Box w="full" textAlign="left">
           //     {set.info.name}
@@ -238,8 +238,8 @@ export default function MakingView({ list, handleDelete }) {
           //   </Box>
           // </VStack>
         ))}
-        <Box fontWeight={700}>저장 데이터 샘플</Box>
-        <Code w="full">{JSON.stringify(sets)}</Code>
+        {/* <Box fontWeight={700}>저장 데이터 샘플</Box>
+        <Code w="full">{JSON.stringify(sets)}</Code> */}
       </Modal>
     </>
   );

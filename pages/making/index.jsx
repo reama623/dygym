@@ -66,10 +66,9 @@ export default function Making() {
           </List>
         </GridItem>
         <GridItem colSpan={2} p="3" h="200" overflowY="scroll">
-          <Box display="flex" flexWrap="wrap" justifyContent="space-between">
-            {isLoading && "Loading..."}
-            {!isLoading &&
-              category.map((c) => (
+          <Box display="flex" flexWrap="wrap" justifyContent="flex-start">
+            {/* {isLoading && "Loading..."} */}
+            {category?.map((c) => (
                 <Box
                   key={c.id}
                   m={2}
@@ -78,7 +77,7 @@ export default function Making() {
                   borderRadius={5}
                   onClick={(e) => handleClickCategory(e, c)}
                 >
-                  {c.name}
+                  {c.title}
                 </Box>
               ))}
           </Box>

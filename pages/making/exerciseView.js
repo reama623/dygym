@@ -3,9 +3,9 @@ import useCategoryItem from "../../effects/useCategoryItem";
 
 export default function ExerciseView({ category, handleClick }) {
   const { data: exercises, isLoading } = useCategoryItem(category?.id);
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   if (!isLoading && !exercises?.length) {
     return (
@@ -24,7 +24,7 @@ export default function ExerciseView({ category, handleClick }) {
       borderRadius={5}
       onClick={(e) => handleClick(e, exercise)}
     >
-      {exercise.name}
+      {exercise.title}
     </Box>
   ));
 }
