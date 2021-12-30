@@ -238,8 +238,8 @@ export default function MakingView({ list, handleDelete }) {
           //   </Box>
           // </VStack>
         ))}
-        <Box fontWeight={700}>저장 데이터 샘플</Box>
-        <Code w="full">{JSON.stringify(sets)}</Code>
+        {/* <Box fontWeight={700}>저장 데이터 샘플</Box>
+        <Code w="full">{JSON.stringify(sets).replace(/\"/g, '\\"')}</Code> */}
       </Modal>
     </>
   );

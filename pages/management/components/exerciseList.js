@@ -34,15 +34,24 @@ export default function ExerciseList({ id }) {
   });
 
   const { data, isLoading, error } = useCategoryItem(id);
-  const addExercise = () => {
+  const addExerciseCase = () => {
     const newExerciseList = [...exercise];
     newExerciseList.push({ ...newExerciseObj(exercise.length) });
     setExercise([...newExerciseList]);
   };
+
+  const deleteExerciseCase = (e, id) => {
+    const copyExercise = [...exercise];
+    const findExerciseIndex = exercise.findIndex((ex) => ex.id === id);
+    copyExercise.splice(findExerciseIndex, 1);
+    setExercise([...copyExercise]);
+  };
+
   const deleteExercise = async (e, item) => {
     await axios.delete(`/exercise?id=${item.id}`);
-    mutate("/get/category");
-    mutate(["/get/category/list", id]);
+    mutate("/get/category").then((o) => {
+      mutate(["/get/category/list", id]);
+    });
   };
 
   const handleUpdateExercise = (e, item) => {
@@ -82,27 +91,34 @@ export default function ExerciseList({ id }) {
     setExercise([...copyExercise]);
   };
 
-  const handleAddSubmit = async (e, index) => {
+  const handleAddSubmit = async (e, eid) => {
+    // console
+    const findExercise = exercise.find((ex) => ex.id === eid);
     const convertParams = {
       id,
       name: exercise[index][`name-${index}`],
       desc: exercise[index][`desc-${index}`],
     };
-    await axios.post("/exercise", { ...convertParams });
-
-    mutate("/get/category");
-    mutate(["/get/category/list", id]);
-    handleAddCancel(e, index);
+    await axios
+      .post("/exercise", { ...convertParams })
+      .then((o) => {
+        mutate("/get/category");
+        mutate(["/get/category/list", id]);
+        deleteExerciseCase(e, id);
+      })
+      .catch((o) => {
+        const { response } = o;
+        if (response.status === 500) {
+          alert("중복된 이름이 존재합니다.");
+          return;
+        }
+        console.error("[ERROR]:[create]:[exercise]", o);
+      });
   };
 
-  const handleAddCancel = (e, index) => {
-    const copyExercise = [...exercise];
-    copyExercise.splice(index, 1);
-    setExercise([...copyExercise]);
-  };
   return (
     <VStack>
-      <Button w="full" onClick={addExercise}>
+      <Button w="full" onClick={addExerciseCase}>
         추가
       </Button>
       <Box w="full" h="xl" overflowY="scroll">
@@ -142,7 +158,7 @@ export default function ExerciseList({ id }) {
                       <Button
                         colorScheme="red"
                         size="xs"
-                        onClick={(e) => handleAddCancel(i)}
+                        onClick={(e) => deleteExerciseCase(e, ex.id)}
                       >
                         x
                       </Button>
@@ -164,8 +180,9 @@ export default function ExerciseList({ id }) {
                     {updateExercise.flag && updateExercise.id === d.id ? (
                       <Td>
                         <Input
-                          name="name"
-                          value={updateExercise.name}
+                          name="title"
+                          size="sm"
+                          value={updateExercise.title}
                           onChange={(e) =>
                             setUpdateExercise({
                               ...updateExercise,

@@ -42,10 +42,10 @@ export default function Making() {
       <Grid
         h="calc(100vh - 100px)"
         templateRows="repeat(5, 1fr)"
-        templateColumns="repeat(5, 1fr)"
+        templateColumns="repeat(6, 1fr)"
         gap={2}
       >
-        <GridItem rowSpan={2} colSpan={1}>
+        {/* <GridItem rowSpan={2} colSpan={1}>
           <List>
             <ListItem
               backgroundColor="whiteAlpha.600"
@@ -64,31 +64,39 @@ export default function Making() {
               박성일
             </ListItem>
           </List>
-        </GridItem>
-        <GridItem colSpan={2} p="3" h="200" overflowY="scroll">
-          <Box display="flex" flexWrap="wrap" justifyContent="space-between">
-            {isLoading && "Loading..."}
-            {!isLoading &&
-              category.map((c) => (
-                <Box
-                  key={c.id}
-                  m={2}
-                  p={3}
-                  backgroundColor="gray.200"
-                  borderRadius={5}
-                  onClick={(e) => handleClickCategory(e, c)}
-                >
-                  {c.name}
-                </Box>
-              ))}
+        </GridItem> */}
+        <GridItem
+          colSpan={3}
+          p="3"
+          h="200"
+          overflowY="scroll"
+          bg="gray.200"
+          borderRadius={5}
+        >
+          <Box display="flex" flexWrap="wrap" justifyContent="flex-start">
+            {/* {isLoading && "Loading..."} */}
+            {category?.map((c) => (
+              <Box
+                key={c.id}
+                m={2}
+                p={3}
+                backgroundColor="gray.300"
+                borderRadius={5}
+                onClick={(e) => handleClickCategory(e, c)}
+              >
+                {c.title}
+              </Box>
+            ))}
           </Box>
         </GridItem>
         <GridItem
-          colSpan={2}
+          colSpan={3}
           // bg="papayawhip"
           h="200"
           overflowY="scroll"
           flexWrap="wrap"
+          bg="gray.200"
+          borderRadius={5}
         >
           {selectCategory != null && (
             <ExerciseView
@@ -97,7 +105,13 @@ export default function Making() {
             />
           )}
         </GridItem>
-        <GridItem colSpan={4} rowSpan={4} overflowY="scroll">
+        <GridItem
+          colSpan={6}
+          rowSpan={4}
+          overflowY="scroll"
+          bg="gray.200"
+          borderRadius={5}
+        >
           <MakingView list={list} handleDelete={handleDeleteListItem} />
         </GridItem>
       </Grid>

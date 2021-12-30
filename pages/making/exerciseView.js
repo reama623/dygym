@@ -9,7 +9,7 @@ export default function ExerciseView({ category, handleClick }) {
 
   if (!isLoading && !exercises?.length) {
     return (
-      <Box m={2} p={3} backgroundColor="gray.200" borderRadius={5}>
+      <Box m={2} p={3} backgroundColor="gray.300" borderRadius={5}>
         운동이 없습니다
       </Box>
     );
@@ -20,7 +20,7 @@ export default function ExerciseView({ category, handleClick }) {
       key={exercise.id}
       m={2}
       p={3}
-      backgroundColor="gray.200"
+      backgroundColor="gray.300"
       borderRadius={5}
       onClick={(e) => handleClick(e, exercise)}
     >

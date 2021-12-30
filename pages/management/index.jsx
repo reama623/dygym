@@ -82,6 +82,11 @@ export default function Management() {
   };
 
   const deleteCategory = async (e, id) => {
+    const findCategory = data.find((d) => d.id === id);
+    if (findCategory && findCategory.count > 0) {
+      alert("저장된 운동을 모두 지워야 분류를 지울 수 있습니다");
+      return;
+    }
     await axios.delete(`/category?id=${id}`);
     mutate("/get/category");
     setModal({
