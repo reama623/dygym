@@ -14,6 +14,7 @@ const LinkItems = [
   { name: "Home", link: "/", icon: FiHome },
   { name: "운동 관리", link: "/management", icon: FiCompass },
   { name: "운동 만들기", link: "/making", icon: FiTrendingUp },
+  { name: "운동 달력", link: "/calendar", icon: FiTrendingUp },
   { name: "회원 관리", link: "/user", icon: FiTrendingUp },
   // { name: "Favourites", icon: FiStar, href="" },
   // { name: "Settings", icon: FiSettings, href="" },

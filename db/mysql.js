@@ -4,7 +4,7 @@ const pool = createPool({
   connectionLimit: 5,
   user: "admin",
   password: "1352759",
-  host: "20.210.192.101",
+  host: "20.89.115.239",
   port: 13306,
   database: "dygym",
 });

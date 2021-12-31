@@ -7,7 +7,7 @@ import "../utils/string.util";
 import axios from "axios";
 import Layout from "../components/layout/index";
 
-import "../styles/reset.css";
+import "../styles/index.scss";
 
 if (typeof window !== "undefined") {
   axios.defaults.baseURL = `${window?.origin}/api`;

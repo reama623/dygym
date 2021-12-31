@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import { apiAxios } from "../../../core/api";
+import { asyncFunction } from "../../../db/mysql";
 
 export default async function handler(req, res) {
   const { body, query } = req;
@@ -22,6 +23,11 @@ export default async function handler(req, res) {
       console.error(error);
       return res.status(400).json({ status: false, message: "create fail" });
     }
+  }
+
+  if (req.method === "GET") {
+    const data = await asyncFunction("select * from t_today_exercises");
+    console.log("today--", data);
   }
 
   // if (req.method === "DELETE") {
