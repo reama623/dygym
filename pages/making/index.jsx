@@ -83,6 +83,7 @@ export default function Making() {
                 backgroundColor="gray.300"
                 borderRadius={5}
                 onClick={(e) => handleClickCategory(e, c)}
+                cursor="pointer"
               >
                 {c.title}
               </Box>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   Box,
   Button,
@@ -171,20 +171,103 @@ export default function ExerciseList({ id }) {
       </Box>
       <Box w="full" h="xl" overflowY="scroll">
         <Table variant="simple">
-          <Thead>
+          {/* <Thead>
             <Tr>
               <Th>이름</Th>
               <Th>설명</Th>
               <Th></Th>
             </Tr>
-          </Thead>
+          </Thead> */}
           <Tbody>
             {/* {isLoading && (
               <Tr>
                 <Td colSpan={3}>Loading...</Td>
               </Tr>
             )} */}
-            {data?.length > 0
+            {data?.map((d) => (
+              <Fragment key={d.id}>
+                <Tr>
+                  <Td fontWeight={600}>운동 이름</Td>
+                  <Td>
+                    {updateExercise.flag && updateExercise.id === d.id ? (
+                      <Input
+                        name="title"
+                        // w="28"
+                        // size="sm"
+                        value={updateExercise.title}
+                        onChange={(e) =>
+                          setUpdateExercise({
+                            ...updateExercise,
+                            title: e.target.value,
+                          })
+                        }
+                      />
+                    ) : (
+                      d.title
+                    )}
+                  </Td>
+                  <Td>
+                    {updateExercise.flag && updateExercise.id === d.id ? (
+                      <Button
+                        colorScheme="red"
+                        size="xs"
+                        onClick={(e) => handleUpdateSubmit(e, d)}
+                      >
+                        u
+                      </Button>
+                    ) : (
+                      <Button
+                        colorScheme="red"
+                        size="xs"
+                        onClick={(e) => handleUpdateExercise(e, d)}
+                      >
+                        u
+                      </Button>
+                    )}
+                    {updateExercise.flag && updateExercise.id === d.id ? (
+                      <Button
+                        colorScheme="red"
+                        size="xs"
+                        onClick={(e) => handleUpdateCancel(e, d)}
+                        ml="2"
+                      >
+                        c
+                      </Button>
+                    ) : (
+                      <Button
+                        colorScheme="red"
+                        size="xs"
+                        onClick={(e) => deleteExercise(e, d)}
+                        ml="2"
+                      >
+                        x
+                      </Button>
+                    )}
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td fontWeight={600}>설명</Td>
+                  <Td colSpan={2}>
+                    {updateExercise.flag && updateExercise.id === d.id ? (
+                      <Input
+                        size="sm"
+                        name="title"
+                        value={updateExercise.desc}
+                        onChange={(e) =>
+                          setUpdateExercise({
+                            ...updateExercise,
+                            desc: e.target.value,
+                          })
+                        }
+                      />
+                    ) : (
+                      d.desc
+                    )}
+                  </Td>
+                </Tr>
+              </Fragment>
+            ))}
+            {/* {data?.length > 0
               ? data?.map((d) => (
                   <Tr key={d.id}>
                     {updateExercise.flag && updateExercise.id === d.id ? (
@@ -266,7 +349,7 @@ export default function ExerciseList({ id }) {
                   <Tr>
                     <Td colSpan={3}>운동이 없습니다.</Td>
                   </Tr>
-                )}
+                )} */}
           </Tbody>
         </Table>
       </Box>

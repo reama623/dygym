@@ -8,16 +8,20 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { FiHome, FiTrendingUp, FiCompass } from "react-icons/fi";
+import { useRouter } from "next/router";
 
 const LinkItems = [
   { name: "Home", link: "/", icon: FiHome },
-  { name: "Management", link: "/management", icon: FiCompass },
-  { name: "Making Today", link: "/making", icon: FiTrendingUp },
+  { name: "운동 관리", link: "/management", icon: FiCompass },
+  { name: "운동 만들기", link: "/making", icon: FiTrendingUp },
+  { name: "회원 관리", link: "/user", icon: FiTrendingUp },
   // { name: "Favourites", icon: FiStar, href="" },
   // { name: "Settings", icon: FiSettings, href="" },
 ];
 
 export default function Sidebar({ onClose, ...rest }) {
+  const { pathname } = useRouter();
+  const [_, path] = pathname.split("/");
   return (
     <Box
       transition="3s ease"
@@ -36,7 +40,12 @@ export default function Sidebar({ onClose, ...rest }) {
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map(({ name, link }) => (
-        <NavItem key={name} icon={link.icon} link={link}>
+        <NavItem
+          key={name}
+          icon={link.icon}
+          link={link}
+          hover={link === `/${path}`}
+        >
           {name}
         </NavItem>
       ))}
@@ -44,7 +53,7 @@ export default function Sidebar({ onClose, ...rest }) {
   );
 }
 
-const NavItem = ({ icon, link, children, ...rest }) => {
+const NavItem = ({ icon, link, children, hover, ...rest }) => {
   return (
     <Link href={link}>
       {/* <Link style={{ textDecoration: "none" }}> */}
@@ -59,6 +68,8 @@ const NavItem = ({ icon, link, children, ...rest }) => {
           bg: "cyan.400",
           color: "white",
         }}
+        bg={hover && "cyan.400"}
+        color={hover && "white"}
         {...rest}
       >
         {icon && (

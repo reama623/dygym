@@ -11,13 +11,26 @@ import {
   Input,
   List,
   ListItem,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
   VStack,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import Modal from "../../components/modal";
 
 import { randomID } from "../../core/utils/dic";
+import useUsers from "../../effects/useUsers";
 
 // import MakingExerciseDialog from "./components/makingExerciseDialog";
 
@@ -28,9 +41,18 @@ const setObj = {
 };
 
 export default function MakingView({ list, handleDelete }) {
+  const { data, isLoading } = useUsers();
   const [sets, setSets] = useState([]);
 
-  const [modal, setModal] = useState({
+  const [selectUser, setSelectUser] = useState({
+    id: "",
+    name: "",
+  });
+
+  const [makingModal, setMakingModal] = useState({
+    isOpen: false,
+  });
+  const [userModal, setUserModal] = useState({
     isOpen: false,
   });
 
@@ -46,7 +68,11 @@ export default function MakingView({ list, handleDelete }) {
     setSets([...items]);
   }, [list]);
 
-  const handleModalClose = (e) => setModal({ ...modal, isOpen: false });
+  const handleMakingModalClose = (e) =>
+    setMakingModal({ ...makingModal, isOpen: false });
+
+  const handleUserModalClose = (e) =>
+    setUserModal({ ...userModal, isOpen: false });
 
   const handleAddExerciseSet = (e, item) => {
     const copySets = [...sets];
@@ -95,12 +121,37 @@ export default function MakingView({ list, handleDelete }) {
     setSets([...copySets]);
   };
 
-  const handleSubmit = () => {
-    setModal({
-      ...modal,
-      isOpen: true,
-      title: "만들어진 운동",
+  const handleSelectUser = (e, user) => {
+    setSelectUser({ ...user });
+    setUserModal({
+      ...userModal,
+      isOpen: false,
     });
+  };
+
+  const openUserModal = () => {
+    setUserModal({
+      ...userModal,
+      isOpen: true,
+      title: "회원 선택",
+    });
+  };
+
+  const openMakingModal = () => {
+    if (sets.length > 0) {
+      setMakingModal({
+        ...makingModal,
+        isOpen: true,
+        title: "만들어진 운동",
+      });
+    } else {
+      alert("운동을 추가해주세요");
+    }
+  };
+
+  const submitUserTodayExercise = async () => {
+    const exercises = JSON.stringify(sets).replace(/\"/g, '\\"');
+    await axios.post("/today", { user_id: selectUser.id, exercises });
   };
 
   const handleClipboard = (e) => {
@@ -109,20 +160,25 @@ export default function MakingView({ list, handleDelete }) {
   // console.log(sets);
   return (
     <>
-      <Box ml={4} mt={3}>
+      <Box ml={4} mt={3} mb={4}>
         <HStack justifyContent="flex-start">
-          <Box>회원 {format(new Date(), "yyyy-MM-dd")}의 운동</Box>
-          <Button size="sm">전체 운동 요약</Button>
-          <Button size="sm" onClick={handleSubmit}>
+          <Box>
+            <Button size="sm" onClick={openUserModal}>
+              {selectUser.name === "" ? "회원을 선택해주세요" : selectUser.name}
+            </Button>{" "}
+            {format(new Date(), "yyyy-MM-dd")}의 운동
+          </Box>
+          {/* <Button size="sm">전체 운동 요약</Button> */}
+          <Button size="sm" onClick={openMakingModal}>
             오늘의 운동 만들기
           </Button>
         </HStack>
       </Box>
       <VStack alignItems="flex-start">
         <Accordion defaultIndex={[0]} allowMultiple w="full">
-          {!list?.length && "No Item"}
+          {!list?.length && <Box m={2}>No Item</Box>}
           {list?.map((l) => (
-            <AccordionItem key={l.id} mb={3} m={2}>
+            <AccordionItem key={l.id} mb={3} ml={4}>
               <h2>
                 <AccordionButton backgroundColor="gray.300" borderRadius={5}>
                   <HStack>
@@ -194,16 +250,25 @@ export default function MakingView({ list, handleDelete }) {
       </VStack>
 
       <Modal
-        {...modal}
-        onClose={handleModalClose}
-        handleSubmit={handleClipboard}
+        {...makingModal}
+        onClose={handleMakingModalClose}
+        handleSubmit={submitUserTodayExercise}
         // handleDelete={handleDelete()}
       >
-        {/* <MakingExerciseDialog sets={sets} /> */}
         {sets?.map((set) => (
           <>
-            <Box>{set.info?.title}</Box>
-            <List key={set.id} mb={3}>
+            <Popover>
+              <PopoverTrigger>
+                <Button fontWeight={700}>{set.info?.title}</Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverHeader>설명</PopoverHeader>
+                <PopoverBody>
+                  {set.info.desc === "" ? "설명 없음" : set.info.desc}
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+            <List key={set.id} ml={2} mt={3} mb={3}>
               {set?.list?.map((l, index) => (
                 <ListItem key={l.id}>
                   {index + 1}set - {l.count} 회 {l.weight} kg
@@ -211,34 +276,34 @@ export default function MakingView({ list, handleDelete }) {
               ))}
             </List>
           </>
-          // <VStack key={set.id}>
-          //   <Box w="full" textAlign="left">
-          //     {set.info.name}
-          //   </Box>
-          //   <Box w="full">
-          //     <Table>
-          //       <Thead>
-          //         <Tr>
-          //           <Th>무게</Th>
-          //           <Th>횟수</Th>
-          //           <Th>설명</Th>
-          //         </Tr>
-          //       </Thead>
-          //       <Tbody>
-          //         {set?.list?.map((l) => (
-          //           <Tr key={l.id}>
-          //             <Td>{l.weight} kg</Td>
-          //             <Td>{l.count} 회</Td>
-          //             <Td>{l.desc}</Td>
-          //           </Tr>
-          //         ))}
-          //       </Tbody>
-          //     </Table>
-          //   </Box>
-          // </VStack>
         ))}
-        {/* <Box fontWeight={700}>저장 데이터 샘플</Box>
-        <Code w="full">{JSON.stringify(sets)}</Code> */}
+      </Modal>
+
+      <Modal
+        {...userModal}
+        onClose={handleUserModalClose}
+        handleSubmit={handleClipboard}
+        // handleDelete={handleDelete()}
+      >
+        <Table>
+          <Thead>
+            <Tr>
+              <Th>이름</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {data?.map((d) => (
+              <Tr
+                key={d.id}
+                _hover={{ bg: "gray.200" }}
+                cursor="pointer"
+                onClick={(e) => handleSelectUser(e, d)}
+              >
+                <Td>{d.name}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
       </Modal>
     </>
   );
