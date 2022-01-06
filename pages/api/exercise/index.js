@@ -7,16 +7,20 @@ export default async function handler(req, res) {
 
   if (req.method === "POST") {
     const { id, title, desc } = body;
-    const { data } = await apiAxios().post(`/exercise/${id}`, {
+    const {
+      data: { result },
+    } = await apiAxios().post(`/exercise/${id}`, {
       title,
       desc,
     });
-    return res.status(200).json(data);
+    return res.status(200).json(result);
   }
 
   if (req.method === "DELETE") {
     const { id } = query;
-    const { data } = await apiAxios().delete(`/exercise/${id}`);
-    return res.status(200).json(data);
+    const {
+      data: { result },
+    } = await apiAxios().delete(`/exercise/${id}`);
+    return res.status(200).json(result);
   }
 }
