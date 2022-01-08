@@ -1,37 +1,27 @@
-import { RecoilRoot } from "recoil";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { createBreakpoints } from "@chakra-ui/theme-tools";
-
 // import "../db/firebase";
 import "../utils/string.util";
 import axios from "axios";
 import Layout from "../components/layout/index";
 
 import "../styles/index.scss";
+import { AppContext } from "../context/appContext";
+import { useState } from "react";
 
 if (typeof window !== "undefined") {
   axios.defaults.baseURL = `${window?.origin}/api`;
 }
 
-const breakpoints = createBreakpoints({
-  sm: "30em",
-  md: "48em",
-  lg: "62em",
-  xl: "80em",
-  "2xl": "96em",
-});
-
-const theme = extendTheme({ breakpoints });
-
 function MyApp({ Component, pageProps }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
   return (
-    <RecoilRoot>
-      <ChakraProvider theme={theme}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ChakraProvider>
-    </RecoilRoot>
+    <AppContext.Provider value={{ drawer: { mobileOpen, handleDrawerToggle } }}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </AppContext.Provider>
   );
 }
 

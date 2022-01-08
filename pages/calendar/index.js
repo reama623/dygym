@@ -1,10 +1,9 @@
-import { Box, VStack } from "@chakra-ui/react";
+import { Grid, Paper, Stack, styled } from "@mui/material";
+import { Box } from "@mui/system";
 
-import { Calendar as BigCalendar, dateFnsLocalizer } from "react-big-calendar";
-import ko from "date-fns/locale/ko";
+import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
-// import useTodayExercises from "../../effects/useTodayExercises";
-import events from "../../assets/events";
+import { ko } from "date-fns/locale";
 
 const locales = {
   ko,
@@ -18,22 +17,30 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
+
 export default function Calendar() {
-  // const { data } = useTodayExercises();
   return (
-    <Box>
-      <VStack>
-        <Box w="full">트레이너님 반갑습니다.</Box>
-        <Box w="full">
-          <BigCalendar
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Item>
+          <Calendar
             localizer={localizer}
-            events={events}
+            events={[]}
             startAccessor="start"
             endAccessor="end"
-            style={{ height: 600 }}
+            style={{ height: 700 }}
           />
-        </Box>
-      </VStack>
-    </Box>
+        </Item>
+      </Grid>
+      {/* <Grid item md={9} sm={12}>
+          <Item>xs=9</Item>
+        </Grid> */}
+    </Grid>
   );
 }

@@ -1,42 +1,35 @@
 // import React from "react";
+// import Header from "./header";
+// import Sidebar from "./sidebar";
+
+import { Container, CssBaseline, Toolbar } from "@mui/material";
+import { Box } from "@mui/system";
 import Header from "./header";
-import Sidebar from "./sidebar";
+import Navbar from "./navbar";
 
-import {
-  Box,
-  useColorModeValue,
-  Drawer,
-  DrawerContent,
-  useDisclosure,
-} from "@chakra-ui/react";
-
+const drawerWidth = 200;
 
 export default function SidebarWithHeader({ children }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
-      <Sidebar
-        onClose={() => onClose}
-        display={{ base: "none", md: "block" }}
-      />
-      <Drawer
-        autoFocus={false}
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full"
-      >
-        <DrawerContent>
-          <Sidebar onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-      {/* mobilenav */}
-      <Header onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
+    <>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <Header drawerWidth={drawerWidth} />
+        <Navbar drawerWidth={drawerWidth} />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            // height: { sm: `calc(100vh - 64px)` },
+          }}
+        >
+          <Toolbar />
+          {children}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 }
