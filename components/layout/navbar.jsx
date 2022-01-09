@@ -1,18 +1,23 @@
 import {
   Divider,
   Drawer,
+  Icon,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import {
-  MoveToInbox as InboxIcon,
-  Mail as MailIcon,
+  Home as HomeIcon,
+  FitnessCenter as FitnessCenterIcon,
+  Event as EventIcon,
+  Settings,
 } from "@mui/icons-material";
+
 import { Box } from "@mui/system";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AppContext } from "../../context/appContext";
 
 import Link from "next/link";
@@ -22,36 +27,49 @@ const pages = [
     name: "home",
     url: "/home",
     displayName: "홈",
+    icon: HomeIcon,
   },
   {
     name: "exerciseManagement",
     url: "/exercises",
     displayName: "운동 관리",
+    icon: FitnessCenterIcon,
   },
   {
     name: "calendar",
     url: "/calendar",
     displayName: "운동 만들기",
+    icon: EventIcon,
   },
   {
     name: "manage",
     url: "/manage",
     displayName: "관리",
+    icon: Settings,
   },
 ];
 
 const drawer = (
   <>
-    <Toolbar />
+    <Toolbar>
+      <Typography
+        variant="h6"
+        noWrap
+        component="div"
+        sx={{ display: { xs: "none", sm: "block" } }}
+      >
+        DYGYM
+      </Typography>
+    </Toolbar>
     <Divider />
     <List>
       {pages.map((page, index) => {
         return (
           <Link key={index} href={page?.url}>
             <ListItem button key={page.name}>
-              {/* <ListItemIcon>
-            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-          </ListItemIcon> */}
+              <ListItemIcon>
+                <Icon component={page.icon} />
+              </ListItemIcon>
               <ListItemText primary={page.displayName} />
             </ListItem>
           </Link>
@@ -74,7 +92,11 @@ export default function Navbar({ drawerWidth }) {
   return (
     <Box
       component="nav"
-      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      sx={{
+        width: { sm: drawerWidth },
+        flexShrink: { sm: 0 },
+        display: { xs: "none", md: "block" },
+      }}
     >
       <Drawer
         container={container}
@@ -89,7 +111,7 @@ export default function Navbar({ drawerWidth }) {
             width: drawerWidth,
             boxSizing: "border-box",
           },
-          display: { xs: "black", sm: "none" },
+          display: { md: "block", sm: "none" },
         }}
       >
         {drawer}
@@ -97,7 +119,7 @@ export default function Navbar({ drawerWidth }) {
       <Drawer
         variant="permanent"
         sx={{
-          display: { xs: "none", sm: "block" },
+          display: { xs: "none", md: "block" },
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
         }}
         open

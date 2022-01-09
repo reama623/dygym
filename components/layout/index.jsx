@@ -22,7 +22,7 @@ export default function SidebarWithHeader({ children }) {
           sx={{
             flexGrow: 1,
             p: 3,
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            width: { md: `calc(100% - ${drawerWidth}px)` },
             // height: { sm: `calc(100vh - 64px)` },
           }}
         >

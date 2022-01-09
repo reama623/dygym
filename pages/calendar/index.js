@@ -1,7 +1,7 @@
 import { Grid, Paper, Stack, styled } from "@mui/material";
 import { Box } from "@mui/system";
 
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import { Calendar as BigCalendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { ko } from "date-fns/locale";
 
@@ -29,7 +29,7 @@ export default function Calendar() {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Item>
-          <Calendar
+          <BigCalendar
             localizer={localizer}
             events={[]}
             startAccessor="start"

@@ -159,8 +159,8 @@ export default function Header({ drawerWidth }) {
       <AppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          width: { md: `calc(100% - ${drawerWidth}px)` },
+          ml: { md: `${drawerWidth}px` },
         }}
       >
         <Toolbar>
@@ -169,18 +169,10 @@ export default function Header({ drawerWidth }) {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{ mr: 2, display: { xs: "flex", md: "none" } }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            DYGYM
-          </Typography>
           {/* <Search>
             <SearchIconWrapper>
               <SearchIcon />
