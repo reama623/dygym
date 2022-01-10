@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 
 const items = [
@@ -46,7 +47,7 @@ export default function ExerciseList({ openModal }) {
 }
 
 function card({ item, hover }) {
-  console.log(hover)
+  console.log(hover);
   return (
     <>
       <CardContent>
