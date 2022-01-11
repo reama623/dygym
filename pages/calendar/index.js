@@ -2,6 +2,7 @@ import {
   Button,
   Divider,
   Grid,
+  Modal,
   Paper,
   Popover,
   Stack,
@@ -38,24 +39,29 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const events = [
   {
-    title: "sample",
+    title: "김지영",
     start: new Date("2022", "0", "10"),
     end: new Date("2022", "0", "10"),
     info: {
-      userId: "admin",
+      userId: "kim",
       name: "김지영",
       exercise: {},
     },
   },
   {
-    title: "sample2",
+    title: "박성일",
     start: new Date("2022", "0", "11"),
     end: new Date("2022", "0", "11"),
+    info: {
+      userId: "park",
+      name: "박성일",
+      exercise: {},
+    },
   },
 ];
 
 export default function Calendar() {
-  const router = useRouter();
+  const { push } = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const [popover, setPopover] = useState({
@@ -63,17 +69,22 @@ export default function Calendar() {
   });
 
   const handleSelectSlot = (info) => {
-    setPopover({
-      ...popover,
-      key: true,
-    });
+    if (info.action === "click") {
+      setPopover({
+        ...popover,
+        key: true,
+        info: {
+          date: info.start,
+        },
+      });
+    }
   };
   const handleSelectEvent = (event, e) => {
-    console.log(e, event);
     setAnchorEl(e.target);
     setPopover({
       ...popover,
       key: false,
+      info: { ...event },
     });
   };
 
@@ -131,25 +142,72 @@ export default function Calendar() {
           horizontal: "left",
         }}
       >
-        {popover.key && <CreateExercise />}
-        {!popover.key && <DetailExercise />}
+        {popover.key && <CreateExercise push={push} {...popover?.info} />}
+        {!popover.key && (
+          <DetailExercise
+            push={push}
+            {...popover?.info}
+            closePopover={handleSelectEventClose}
+          />
+        )}
         {/* <Typography sx={{ p: 2 }}>The content of the Popover.</Typography> */}
       </Popover>
     </>
   );
 }
 
-function CreateExercise({ date = new Date() }) {
-  console.log(date);
+function CreateExercise({ push, date = new Date() }) {
+  const handleCreate = (e) => {
+    push("/calendar/create");
+  };
   return (
-    <Box>
-      <Typography pt={1} pl={2} pb={1} variant="h6">
-        운동 생성
-      </Typography>
-      <Divider />
-      <Box p={2} width={350}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
+    <Box p={2}>
+      <Box display="flex" justifyContent="center" mb={2}>
+        <Typography>{format(date, "yyyy-MM-dd")}</Typography>
+      </Box>
+      <Button variant="contained" onClick={handleCreate}>
+        운동 추가
+      </Button>
+    </Box>
+  );
+}
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  // bgcolor: "background.paper",
+  backgroundColor: "white",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
+function DetailExercise({ push, start, info, closePopover }) {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const selectDate = format(start, "yyyy-MM-dd");
+  const handleUpdate = (e) => {
+    push(`/calendar/update/${info.userId}?date=${selectDate}`);
+  };
+  const handleDelete = (e) => {
+    handleClose();
+    closePopover();
+  };
+  return (
+    <>
+      <Box>
+        <Typography pt={1} pl={2} pb={1} variant="h6">
+          {info.name} 회원 <Typography>{selectDate}의 운동</Typography>
+        </Typography>
+        <Divider />
+        <Box p={2} width={350}>
+          <Grid container spacing={2}>
+            {/* <Grid item xs={12}>
             <Box
               display="flex"
               alignItems="center"
@@ -161,22 +219,58 @@ function CreateExercise({ date = new Date() }) {
               <Typography>일자 : {format(date, "yyyy-MM-dd")}</Typography>
               <Button></Button>
             </Box>
+          </Grid> */}
+            <Grid item xs={12}>
+              운동 만들기
+            </Grid>
+            <Grid item xs={12}>
+              <Box display="flex" justifyContent="flex-end">
+                <Button
+                  variant="contained"
+                  color="error"
+                  sx={{ mr: 2 }}
+                  onClick={handleOpen}
+                >
+                  삭제
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleUpdate}
+                >
+                  수정
+                </Button>
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            운동 선택
-          </Grid>
-          <Grid item xs={12}>
-            운동 만들기
-          </Grid>
-        </Grid>
+        </Box>
       </Box>
-    </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2" mb={3}>
+            {selectDate}
+            <Typography>{info.name}님의 운동을 삭제하시겠습니까?</Typography>
+          </Typography>
+          <Box display="flex" justifyContent="flex-end">
+            <Button
+              variant="contained"
+              color="error"
+              sx={{ mr: 2 }}
+              onClick={handleDelete}
+            >
+              삭제
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleClose}>
+              취소
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+    </>
   );
-}
-// function UpdateExercise() {
-//   return <div>update</div>;
-// }
-
-function DetailExercise() {
-  return <div>detail</div>;
 }
