@@ -158,7 +158,7 @@ export default function Calendar() {
 
 function CreateExercise({ push, date = new Date() }) {
   const handleCreate = (e) => {
-    push("/calendar/create");
+    push(`/calendar/create?date=${format(date, "yyyy-MM-dd")}`);
   };
   return (
     <Box p={2}>
