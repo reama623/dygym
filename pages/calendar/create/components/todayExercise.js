@@ -8,7 +8,7 @@ export default function TodayExercise({ userExercises, deleteUserExercise }) {
         운동 만들기 폼
       </Typography>
       <Box>
-        {userExercises.map((exercise, i) => (
+        {userExercises?.map((exercise, i) => (
           <Grid container spacing={2} mb={2} key={i}>
             <Grid item xs={12} sm={2}>
               <Typography>{exercise}</Typography>
