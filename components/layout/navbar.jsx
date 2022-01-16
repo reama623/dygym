@@ -79,14 +79,10 @@ const drawer = (
   </>
 );
 
-export default function Navbar({ drawerWidth }) {
-  const {
-    drawer: { mobileOpen, handleDrawerToggle },
-  } = useContext(AppContext);
-
+export default function Navbar({ drawerWidth, mobileOpen, handleDrawerToggle }) {
   let container = undefined;
   if (typeof window !== "undefined") {
-    container = window !== undefined ? () => window().document.body : undefined;
+    container = window !== undefined ? () => window.document.body : undefined;
   }
 
   return (

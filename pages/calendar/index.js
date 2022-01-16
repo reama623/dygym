@@ -50,6 +50,16 @@ const events = [
   },
   {
     title: "박성일",
+    start: new Date("2022", "0", "10"),
+    end: new Date("2022", "0", "10"),
+    info: {
+      userId: "park",
+      name: "박성일",
+      exercise: {},
+    },
+  },
+  {
+    title: "박성일",
     start: new Date("2022", "0", "11"),
     end: new Date("2022", "0", "11"),
     info: {

@@ -1,101 +1,192 @@
-import { useRouter } from "next/router";
-import { Grid, Paper, Box, Button, Typography, Divider } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { useEffect, useState } from "react";
 
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
+import { useRouter } from "next/router";
+import {
+  Grid,
+  Box,
+  Button,
+  Popover,
+  List,
+  ListItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
+
+import { Save as SaveIcon, Cancel as CancelIcon } from "@mui/icons-material";
+import { useSnackbar } from "notistack";
+import TodayInfo from "./components/todayInfo";
+import ExerciseInfo from "./components/exerciseInfo";
+import TodayExercise from "./components/todayExercise";
+
+const users = [
+  {
+    name: "김지영",
+    userId: "jayden",
+  },
+  {
+    name: "박성일",
+    userId: "park",
+  },
+];
 
 export default function Create() {
   const router = useRouter();
   const { date } = router.query;
+  // const createDate = date ? formatDate(date, "PPPP") : "날짜 선택";
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const [user, setUser] = useState(null);
+  const [category, setCategory] = useState(null);
+
+  const [userExercises, setUserExercises] = useState([]);
+
+  const handleCategory = (e, item) => {
+    setCategory(item);
+  };
+  const handleCancelExercise = (e) => {
+    setCategory(null);
+  };
+
+  const [cancelOpen, setCancelOpen] = useState(false);
+  const cancelCreate = (e) => {
+    setCancelOpen(true);
+  };
+  const closeCancel = (e) => {
+    setCancelOpen(false);
+  };
+  const closeOk = (e) => {
+    router.push("/calendar");
+  };
+
+  const handleExercise = (e, item) => {
+    const userExerciseList = [...userExercises];
+    const userExIndex = userExerciseList.findIndex((userEx) => userEx === item);
+
+    if (userExIndex !== -1) {
+      // userExerciseList.splice(userExIndex, 1);
+      enqueueSnackbar("이미 추가된 운동 입니다", { variant: "warning" });
+    } else {
+      userExerciseList.push(item);
+    }
+
+    setUserExercises([...userExerciseList]);
+  };
+  const deleteUserExercise = (e, item) => {
+    const userExerciseList = [...userExercises];
+    const userExIndex = userExerciseList.findIndex((userEx) => userEx === item);
+    userExerciseList.splice(userExIndex, 1);
+    setUserExercises([...userExerciseList]);
+  };
+
+  const [cal, setCal] = useState(new Date());
+  const handleDateChange = (newValue) => {
+    setCal(newValue);
+  };
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openAnchor = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+  const closeAnchor = (e) => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? "user-popover" : undefined;
+
+  const handleUserClick = (e, item) => {
+    setUser(item);
+    closeAnchor();
+  };
+  useEffect(() => {
+    if (date) {
+      setCal(new Date(date));
+    }
+  }, [date]);
+
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Item sx={{ display: "flex", alignItems: "center" }}>
-          <Button variant="contained" sx={{ mr: 2 }}>
-            회원 선택 버튼
-          </Button>
-          <Box>{date}</Box>
-        </Item>
-      </Grid>
-      <Grid item xs={12}>
-        <Item>
-          <Typography mt={2} mb={1}>
-            운동 선택
-          </Typography>
-          <Box
-            display="flex"
-            flexDirection="flex-start"
-            justifyContent="space-between"
-            flexWrap="wrap"
-            
-          >
-            <Button variant="contained" size="small">
-              등
+    <>
+      <Grid container spacing={2}>
+        <TodayInfo
+          cal={cal}
+          user={user}
+          handleDateChange={handleDateChange}
+          openAnchor={openAnchor}
+        />
+        <Grid item xs={3}>
+          <Box display="flex">
+            <Button
+              variant="contained"
+              color="error"
+              sx={{ mr: 2 }}
+              onClick={cancelCreate}
+            >
+              <CancelIcon />
             </Button>
-            <Button variant="contained" size="small">
-              가슴
-            </Button>
-            <Button variant="contained" size="small">
-              어깨
-            </Button>
-            <Button variant="contained" size="small">
-              허벅지
-            </Button>
-            <Button variant="contained" size="small">
-              이두
-            </Button>
-            <Button variant="contained" size="small">
-              삼두
-            </Button>
-            <Button variant="contained" size="small">
-              등
-            </Button>
-            <Button variant="contained" size="small">
-              가슴
-            </Button>
-            <Button variant="contained" size="small">
-              어깨
-            </Button>
-            <Button variant="contained" size="small">
-              허벅지
-            </Button>
-            <Button variant="contained" size="small">
-              이두
-            </Button>
-            <Button variant="contained" size="small">
-              삼두
+            <Button variant="contained">
+              <SaveIcon />
             </Button>
           </Box>
-          {/* <Grid container spacing={2}>
-            <Grid item xs={1} md={2}>
-              
-            </Grid>
-            <Grid item xs={1} md={2}>
-              
-            </Grid>
-            <Grid item xs={1} md={2}>
-              
-            </Grid>
-            <Grid item xs={1} md={2}>
-              
-            </Grid>
-            <Grid item xs={1} md={2}>
-              
-            </Grid>
-            <Grid item xs={1} md={2}>
-              
-            </Grid>
-          </Grid> */}
-        </Item>
+        </Grid>
+        <ExerciseInfo
+          category={category}
+          handleCategory={handleCategory}
+          handleExercise={handleExercise}
+          handleCancelExercise={handleCancelExercise}
+        />
+        <TodayExercise
+          userExercises={userExercises}
+          deleteUserExercise={deleteUserExercise}
+        />
       </Grid>
-      <Grid item xs={12}>
-        <Item>운동 만들기 폼</Item>
-      </Grid>
-    </Grid>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={closeAnchor}
+        anchorOrigin={{ vertical: "center", horizontal: "right" }}
+        transformOrigin={{ vertical: "center", horizontal: "left" }}
+      >
+        <List>
+          {users.map((user) => (
+            <ListItem
+              sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#eee" } }}
+              onClick={(e) => handleUserClick(e, user)}
+              key={user.id}
+            >
+              {user.name}
+            </ListItem>
+          ))}
+        </List>
+      </Popover>
+      <Dialog
+        open={cancelOpen}
+        onClose={closeCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">운동 만들기 취소</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            작성했던 내용은 사라집니다. 취소하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeCancel} variant="contained">
+            취소
+          </Button>
+          <Button
+            onClick={closeOk}
+            autoFocus
+            variant="contained"
+            color="secondary"
+          >
+            삭제
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }

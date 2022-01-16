@@ -56,7 +56,7 @@ import { useState } from "react";
 //   },
 // }));
 
-export default function Header({ drawerWidth }) {
+export default function Header({ drawerWidth, handleDrawerToggle }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
@@ -169,6 +169,7 @@ export default function Header({ drawerWidth }) {
             edge="start"
             color="inherit"
             aria-label="open drawer"
+            onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { xs: "flex", md: "none" } }}
           >
             <MenuIcon />
@@ -184,7 +185,7 @@ export default function Header({ drawerWidth }) {
           </Search> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
@@ -201,7 +202,7 @@ export default function Header({ drawerWidth }) {
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               size="large"
               edge="end"
