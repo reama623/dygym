@@ -7,12 +7,14 @@ export default async function handler(req, res) {
   const { categoryId } = query;
   if (method === "GET") {
     try {
-      const categorys = await apiAxios().get(
-        `/category/exercise/${categoryId}`
+      const {
+        data: { result },
+      } = await apiAxios().get(
+        `/category/exercise/${categoryId}?trainer_id=trainer1&group_name=dygym`
       );
-      return res.status(200).json(categorys.data);
+      return res.status(200).json(result);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return res.status(200).json([]);
     }
   }

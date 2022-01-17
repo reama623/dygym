@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (req.method === "GET") {
     const {
       data: { result },
-    } = await apiAxios().get("/category/all");
+    } = await apiAxios().get("/category/all?trainer_id=trainer1&group_name=dygym");
     return res.status(200).json(result);
   }
 
@@ -13,7 +13,14 @@ export default async function handler(req, res) {
     const { title, desc } = body;
     const {
       data: { result },
-    } = await apiAxios().post("/category", { title, desc });
+    } = await apiAxios().post("/category", {
+      title,
+      desc,
+      group_name: "dygym",
+      trainer_id: "trainer1",
+      created_user: "admin",
+      updated_user: "admin",
+    });
     return res.status(200).json(result);
   }
 

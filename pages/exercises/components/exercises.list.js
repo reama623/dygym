@@ -1,34 +1,14 @@
 import { useState } from "react";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import useCategoryItem from "../../../effects/useCategoryItem";
 
-const items = [
-  {
-    name: "aa",
-    desc: "aafaf",
-  },
-  {
-    name: "b",
-    desc: "ab",
-  },
-  {
-    name: "c",
-    desc: "afasd",
-  },
-  {
-    name: "d",
-    desc: "ffs",
-  },
-  {
-    name: "e",
-    desc: "ddfq",
-  },
-];
-
-export default function ExerciseList({ openModal }) {
+export default function ExerciseList({ category, openModal }) {
   const [hover, setHover] = useState(0);
+  const { data, isLoading } = useCategoryItem(category?.seq);
+  console.log(isLoading, data);
   return (
     <Grid container>
-      {items.map((item, i) => (
+      {data.map((item, i) => (
         <Grid key={i} item xs={3} md={3} xl={2}>
           <Card
             onClick={(e) => openModal(e, item, "exercise", false)}
@@ -47,12 +27,11 @@ export default function ExerciseList({ openModal }) {
 }
 
 function card({ item, hover }) {
-  console.log(hover);
   return (
     <>
       <CardContent>
         <Typography variant="h5" component="div">
-          {item.name}
+          {item.title}
         </Typography>
         {/* <Typography sx={{ mb: 1.5 }} color="text.secondary">
           category name

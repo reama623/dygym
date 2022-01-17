@@ -12,6 +12,9 @@ import {
 import CategoryList from "./components/category.list";
 import ExerciseList from "./components/exercises.list";
 import { useState } from "react";
+import useCategory from "../../effects/useCategory";
+import { useSWRConfig } from "swr";
+import axios from "axios";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -33,7 +36,8 @@ const style = {
 };
 
 export default function Exercises() {
-  const [category, setCategory] = useState(null);
+  const { data, isLoading } = useCategory();
+  const [selectCategory, setSelectCategory] = useState(null);
   const [modal, setModal] = useState({
     isOpen: false,
     key: "",
@@ -45,11 +49,11 @@ export default function Exercises() {
 
   const [input, setInput] = useState({
     category: {
-      name: "",
+      title: "",
       desc: "",
     },
     exercise: {
-      name: "",
+      title: "",
       desc: "",
     },
   });
@@ -113,11 +117,39 @@ export default function Exercises() {
   };
 
   const handleCategory = (e, item) => {
-    setCategory(item);
+    setSelectCategory(item);
   };
 
-  const createCategory = (e, item) => {
-    alert("create category");
+  const handleNameInput = (e) => {
+    const { name: keyname, value } = e.target;
+    const [key, name] = keyname.split("-");
+    setInput({
+      ...input,
+      [key]: {
+        ...input[key],
+        [name]: value,
+      },
+    });
+  };
+  const handleDescInput = (e) => {
+    const { name: keyname, value } = e.target;
+    const [key, name] = keyname.split("-");
+    setInput({
+      ...input,
+      [key]: {
+        ...input[key],
+        [name]: value,
+      },
+    });
+  };
+
+  const { mutate } = useSWRConfig();
+  const createCategory = async (e, item) => {
+    // mutate("/get/category", "", false);
+    console.log(input.category);
+    // await axios.post("/category", { ...input.category });
+
+    // mutate("/get/category");
   };
   const deleteCategory = (e, item) => {
     e.stopPropagation();
@@ -155,7 +187,8 @@ export default function Exercises() {
             </Box>
             {/* <Divider /> */}
             <CategoryList
-              category={category}
+              list={data}
+              selectCategory={selectCategory}
               openModal={openModal}
               openDeleteModal={openDeleteModal}
               handleCategory={handleCategory}
@@ -164,22 +197,22 @@ export default function Exercises() {
         </Grid>
         <Grid item xs={12} md={9} xl={10}>
           <Item>
-            {category && (
+            {data && (
               <Box
                 sx={{ height: 50, pl: 3 }}
                 display="flex"
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Typography>{category?.name}</Typography>
+                <Typography>{selectCategory?.name}</Typography>
                 <Button onClick={(e) => openModal(e, null, "exercise", true)}>
                   운동 생성
                 </Button>
               </Box>
             )}
             {/* <Divider /> */}
-            {category ? (
-              <ExerciseList category={category} openModal={openModal} />
+            {data ? (
+              <ExerciseList category={selectCategory} openModal={openModal} />
             ) : (
               <Box
                 height={500}
@@ -214,7 +247,9 @@ export default function Exercises() {
                 }`}
                 label="분류 제목 입력"
                 variant="outlined"
-                value={input[modal.key]?.name}
+                value={input[modal.key]?.title}
+                name={`${modal.key}-title`}
+                onChange={handleNameInput}
                 // defaultValue={!modal.type && modal.item.name}
                 sx={{ width: "100%" }}
               />
@@ -228,7 +263,9 @@ export default function Exercises() {
                 multiline
                 maxRows={5}
                 // defaultValue={!modal.type && modal.item.desc}
+                onChange={handleDescInput}
                 value={input[modal.key]?.desc}
+                name={`${modal.key}-desc`}
                 sx={{ width: "100%" }}
                 // value={value}
                 // onChange={handleChange}
@@ -249,7 +286,7 @@ export default function Exercises() {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
-            {deleteModal.item?.name}를(을) 삭제하시겠습니까?
+            {deleteModal.item?.title}를(을) 삭제하시겠습니까?
           </Typography>
           <Box mt={2} display="flex" justifyContent="flex-end">
             <Button onClick={(e) => deleteModal.submit(e)}>ok</Button>
