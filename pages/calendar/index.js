@@ -73,6 +73,7 @@ const events = [
 export default function Calendar() {
   const { push } = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElPosition, setAnchorElPosition] = useState({ left: 0, top: 0 });
 
   const [popover, setPopover] = useState({
     key: true,
@@ -87,10 +88,13 @@ export default function Calendar() {
           date: info.start,
         },
       });
+      setAnchorEl(document.querySelector(".date-click"));
+      setAnchorElPosition({ use: true, left: info.box.x, top: info.box.y });
     }
   };
   const handleSelectEvent = (event, e) => {
     setAnchorEl(e.target);
+    setAnchorElPosition({ ...anchorElPosition, use: false });
     setPopover({
       ...popover,
       key: false,
@@ -100,22 +104,31 @@ export default function Calendar() {
 
   const handleSelectEventClose = (e) => {
     setAnchorEl(null);
+    setAnchorElPosition({ use: false, left: 0, top: 0 });
   };
   const open = Boolean(anchorEl);
   const id = open ? "event-popover" : undefined;
 
-  const clickEvent = (e) => {
-    if (e.target.getAttribute("class").indexOf("rbc-day-bg") !== -1) {
-      setAnchorEl(e.target);
-    }
-  };
+  // const clickEvent = (e) => {
+  //   const target = e.target;
+  //   const targetClass = target.getAttribute("class").split(" ");
+  //   if (targetClass.find(c => c === "date-click")) {
+  //     setAnchorEl(target);
+  //   }
+  // };
 
-  useEffect(() => {
-    window.addEventListener("click", clickEvent);
-    return () => {
-      window.removeEventListener("click", clickEvent);
+  // useEffect(() => {
+  //   window.addEventListener("click", clickEvent);
+  //   return () => {
+  //     window.removeEventListener("click", clickEvent);
+  //   };
+  // }, []);
+
+  const customDayPropGatter = (date) => {
+    return {
+      className: "date-click",
     };
-  }, []);
+  };
 
   return (
     <>
@@ -131,6 +144,8 @@ export default function Calendar() {
               style={{ height: 700 }}
               onSelectEvent={handleSelectEvent}
               onSelectSlot={handleSelectSlot}
+              dayPropGetter={customDayPropGatter}
+              views={["month"]}
             />
           </Item>
         </Grid>
@@ -150,6 +165,12 @@ export default function Calendar() {
         transformOrigin={{
           vertical: "center",
           horizontal: "left",
+        }}
+        // anchorReference="none"
+        anchorReference={anchorElPosition.use ? "anchorPosition" : "anchorEl"}
+        anchorPosition={{
+          left: anchorElPosition.left,
+          top: anchorElPosition.top,
         }}
       >
         {popover.key && <CreateExercise push={push} {...popover?.info} />}
