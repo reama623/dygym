@@ -68,6 +68,7 @@ export default function Create() {
     if (userExIndex !== -1) {
       // userExerciseList.splice(userExIndex, 1);
       enqueueSnackbar("이미 추가된 운동 입니다", { variant: "warning" });
+      return;
     } else {
       userExerciseList.push(item);
     }

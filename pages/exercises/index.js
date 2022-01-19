@@ -5,7 +5,6 @@ import {
   Box,
   Typography,
   Button,
-  Divider,
   Modal,
   TextField,
 } from "@mui/material";
@@ -15,6 +14,7 @@ import { useState } from "react";
 import useCategory from "../../effects/useCategory";
 import { useSWRConfig } from "swr";
 import axios from "axios";
+import { useSnackbar } from "notistack";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -36,6 +36,7 @@ const style = {
 };
 
 export default function Exercises() {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { data, isLoading } = useCategory();
   const [selectCategory, setSelectCategory] = useState(null);
   const [modal, setModal] = useState({
@@ -59,7 +60,7 @@ export default function Exercises() {
   });
 
   const openModal = (e, item, key, type) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     const newModal = {
       ...modal,
       isOpen: true,
@@ -67,20 +68,6 @@ export default function Exercises() {
       type,
       item,
     };
-    if (key === "category") {
-      if (type) {
-        newModal.submit = createCategory;
-      } else {
-        newModal.submit = updateCategory;
-      }
-    }
-    if (key === "exercise") {
-      if (type) {
-        newModal.submit = createExercise;
-      } else {
-        newModal.submit = updateExercise;
-      }
-    }
     setModal(newModal);
     setInput({
       ...input,
@@ -89,6 +76,7 @@ export default function Exercises() {
       },
     });
   };
+  console.log(modal, "--");
   const openDeleteModal = (e, item, type) => {
     e.stopPropagation();
     const newDeleteModal = {
@@ -146,6 +134,12 @@ export default function Exercises() {
 
   const { mutate } = useSWRConfig();
   const createCategory = async (e, item) => {
+    if (input.category.title === "") {
+      enqueueSnackbar("이름을 입력해주세요", {
+        variant: "error",
+      });
+      return;
+    }
     // mutate("/get/category", "", false);
 
     try {
@@ -159,15 +153,16 @@ export default function Exercises() {
     }
   };
   const deleteCategory = async (e, item) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     // alert("delete category");
     const { seq } = deleteModal.item;
     try {
       await axios.delete(`/category/${seq}`);
       mutate(`/get/category`);
     } catch (error) {
-      console.log('error', error)
+      console.log("error", error);
     } finally {
+      closeModal();
       closeDeleteModal();
     }
   };
@@ -191,7 +186,7 @@ export default function Exercises() {
   const deleteExercise = (e, item) => {
     alert("update exercise");
   };
-  console.log(deleteModal);
+
   return (
     <>
       <Grid container spacing={2}>
@@ -213,7 +208,6 @@ export default function Exercises() {
               list={data}
               selectCategory={selectCategory}
               openModal={openModal}
-              openDeleteModal={openDeleteModal}
               handleCategory={handleCategory}
             />
           </Item>
@@ -296,13 +290,31 @@ export default function Exercises() {
             </Grid>
           </Grid>
           <Box mt={2} display="flex" justifyContent="flex-end">
-            <Button
-              onClick={
-                modal.key === "category" ? createCategory : createExercise
-              }
-            >
-              ok
-            </Button>
+            {!modal.type && (
+              <Button
+                onClick={(e) => openDeleteModal(e, modal.item, modal.key)}
+              >
+                Delete
+              </Button>
+            )}
+            {modal.type ? (
+              <Button
+                onClick={
+                  modal.key === "category" ? createCategory : createExercise
+                }
+              >
+                ok
+              </Button>
+            ) : (
+              <Button
+                onClick={
+                  modal.key === "category" ? updateCategory : updateExercise
+                }
+              >
+                update
+              </Button>
+            )}
+
             <Button onClick={closeModal}>cancel</Button>
           </Box>
         </Box>
