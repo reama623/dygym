@@ -17,6 +17,7 @@ import { format, parse, startOfWeek, getDay } from "date-fns";
 import { ko } from "date-fns/locale";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import useTodayExercises from "../../effects/useTodayExercises";
 
 const locales = {
   ko,
@@ -71,6 +72,7 @@ const events = [
 ];
 
 export default function Calendar() {
+  const { data, isLoading } = useTodayExercises();
   const { push } = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElPosition, setAnchorElPosition] = useState({ left: 0, top: 0 });
@@ -109,21 +111,6 @@ export default function Calendar() {
   const open = Boolean(anchorEl);
   const id = open ? "event-popover" : undefined;
 
-  // const clickEvent = (e) => {
-  //   const target = e.target;
-  //   const targetClass = target.getAttribute("class").split(" ");
-  //   if (targetClass.find(c => c === "date-click")) {
-  //     setAnchorEl(target);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener("click", clickEvent);
-  //   return () => {
-  //     window.removeEventListener("click", clickEvent);
-  //   };
-  // }, []);
-
   const customDayPropGatter = (date) => {
     return {
       className: "date-click",
@@ -137,7 +124,7 @@ export default function Calendar() {
           <Item>
             <BigCalendar
               localizer={localizer}
-              events={events}
+              events={data}
               startAccessor="start"
               endAccessor="end"
               selectable={true}

@@ -5,7 +5,9 @@ export default async function handler(req, res) {
   if (req.method === "GET") {
     const {
       data: { result },
-    } = await apiAxios().get("/category/all?trainer_id=trainer1&group_name=dygym");
+    } = await apiAxios().get(
+      "/category/all?trainer_id=trainer1&group_name=dygym"
+    );
     return res.status(200).json(result);
   }
 

@@ -5,11 +5,25 @@ import useCategoryItem from "../../../effects/useCategoryItem";
 export default function ExerciseList({ category, openModal }) {
   const [hover, setHover] = useState(0);
   const { data, isLoading } = useCategoryItem(category?.seq);
-  console.log(isLoading, data);
   return (
     <Grid container>
-      {data.map((item, i) => (
-        <Grid key={i} item xs={3} md={3} xl={2}>
+      {data?.length > 0 ? (
+        data.map((item, i) => (
+          <Grid key={i} item xs={3} md={3} xl={2}>
+            <Card
+              onClick={(e) => openModal(e, item, "exercise", false)}
+              sx={{
+                margin: 1,
+                "&:hover": { backgroundColor: "#eee", cursor: "pointer" },
+              }}
+              // onMouseOver={}
+            >
+              {card({ item, hover })}
+            </Card>
+          </Grid>
+        ))
+      ) : (
+        <Grid item xs={3} md={3} xl={2}>
           <Card
             onClick={(e) => openModal(e, item, "exercise", false)}
             sx={{
@@ -18,10 +32,10 @@ export default function ExerciseList({ category, openModal }) {
             }}
             // onMouseOver={}
           >
-            {card({ item, hover })}
+            {card({ item: { title: "운동 없음" }, hover })}
           </Card>
         </Grid>
-      ))}
+      )}
     </Grid>
   );
 }

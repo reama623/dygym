@@ -93,19 +93,20 @@ export default function Exercises() {
     e.stopPropagation();
     const newDeleteModal = {
       isOpen: true,
-      type,
+      key: type,
       item,
     };
-    if (type === "category") {
-      newDeleteModal.submit = deleteCategory;
-    }
-    if (type === "exercise") {
-      newDeleteModal.submit = deleteExercise;
-    }
+    // if (type === "category") {
+    //   newDeleteModal.submit = deleteCategory;
+    // }
+    // if (type === "exercise") {
+    //   newDeleteModal.submit = deleteExercise;
+    // }
     setDeleteModal(newDeleteModal);
   };
   const closeDeleteModal = (e) => {
     setDeleteModal({
+      ...deleteModal,
       isOpen: false,
     });
   };
@@ -146,22 +147,43 @@ export default function Exercises() {
   const { mutate } = useSWRConfig();
   const createCategory = async (e, item) => {
     // mutate("/get/category", "", false);
-    console.log(input.category);
-    // await axios.post("/category", { ...input.category });
 
-    // mutate("/get/category");
+    try {
+      await axios.post("/category", { ...input.category });
+
+      mutate("/get/category");
+    } catch (error) {
+      // error
+    } finally {
+      closeModal();
+    }
   };
-  const deleteCategory = (e, item) => {
+  const deleteCategory = async (e, item) => {
     e.stopPropagation();
-    alert("delete category");
+    // alert("delete category");
+    const { seq } = deleteModal.item;
+    try {
+      await axios.delete(`/category/${seq}`);
+      mutate(`/get/category`);
+    } catch (error) {
+      console.log('error', error)
+    } finally {
+      closeDeleteModal();
+    }
   };
   const updateCategory = (e, item) => {
     e.stopPropagation();
     alert("update category");
   };
 
-  const createExercise = (e, item) => {
-    alert("create exercise");
+  const createExercise = async (e) => {
+    // alert("create exercise");
+    await axios.post("/exercise", {
+      ...input.exercise,
+      id: selectCategory.seq,
+    });
+
+    mutate(`/category/list/${selectCategory.seq}`);
   };
   const updateExercise = (e, item) => {
     alert("delete exercise");
@@ -169,6 +191,7 @@ export default function Exercises() {
   const deleteExercise = (e, item) => {
     alert("update exercise");
   };
+  console.log(deleteModal);
   return (
     <>
       <Grid container spacing={2}>
@@ -211,7 +234,7 @@ export default function Exercises() {
               </Box>
             )}
             {/* <Divider /> */}
-            {data ? (
+            {selectCategory && data ? (
               <ExerciseList category={selectCategory} openModal={openModal} />
             ) : (
               <Box
@@ -273,7 +296,13 @@ export default function Exercises() {
             </Grid>
           </Grid>
           <Box mt={2} display="flex" justifyContent="flex-end">
-            <Button onClick={(e) => modal.submit(e)}>ok</Button>
+            <Button
+              onClick={
+                modal.key === "category" ? createCategory : createExercise
+              }
+            >
+              ok
+            </Button>
             <Button onClick={closeModal}>cancel</Button>
           </Box>
         </Box>
@@ -289,7 +318,13 @@ export default function Exercises() {
             {deleteModal.item?.title}를(을) 삭제하시겠습니까?
           </Typography>
           <Box mt={2} display="flex" justifyContent="flex-end">
-            <Button onClick={(e) => deleteModal.submit(e)}>ok</Button>
+            <Button
+              onClick={
+                deleteModal.key === "category" ? deleteCategory : deleteExercise
+              }
+            >
+              ok
+            </Button>
             <Button onClick={closeDeleteModal}>cancel</Button>
           </Box>
         </Box>

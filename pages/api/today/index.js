@@ -26,8 +26,14 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "GET") {
+    const {
+      data: { result },
+    } = await apiAxios().get(
+      `/t/exercises?trainer_id=Park&group_name=dygym&start_date=2022-01-01&end_date=2022-01-31`
+    );
+    return res.status(200).json(result);
     // const data = await asyncFunction("select * from t_today_exercises");
-    console.log("today--", data);
+    // console.log("today--", data);
   }
 
   // if (req.method === "DELETE") {

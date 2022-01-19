@@ -50,13 +50,13 @@ export default function CategoryList({
               onMouseLeave={(e) => handleHoverOut(e, c)}
             >
               <ListItemText primary={c.title} />
-              {hover === c.seq && (
+              {/* {hover === c.seq && (
                 <ListItemIcon
                   onClick={(e) => openModal(e, c, "category", false)}
                 >
                   <EditIcon />
                 </ListItemIcon>
-              )}
+              )} */}
               {hover === c.seq && (
                 <ListItemIcon
                   onClick={(e) => openDeleteModal(e, c, "category")}

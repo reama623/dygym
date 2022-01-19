@@ -6,6 +6,7 @@ export default async function handler(req, res) {
   const { method, query } = req;
   const { categoryId } = query;
   if (method === "GET") {
+    const url = `/category/exercise/${categoryId}?trainer_id=trainer1&group_name=dygym`;
     try {
       const {
         data: { result },

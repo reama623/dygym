@@ -30,7 +30,6 @@ export default function useCategoryItem(id) {
       focusThrottleInterval: 60000,
     }
   );
-  console.log(data)
   return {
     data,
     isLoading: isValidating,
