@@ -26,22 +26,15 @@ export default async function handler(req, res) {
     return res.status(200).json(result);
   }
 
-  if (req.method === "DELETE") {
-    const { id } = query;
-    const {
-      data: { result },
-    } = await apiAxios().delete(`/category/${id}`);
-    return res.status(200).json(result);
-  }
-
   if (req.method === "PATCH") {
-    const { id } = query;
-    const { name, desc } = body;
+    const { seq, title, desc } = body;
     const {
       data: { result },
-    } = await apiAxios.patch(`/category/${id}`, {
-      name,
-      description: desc,
+    } = await apiAxios().patch(`/category`, {
+      seq,
+      title,
+      desc,
+      trainer_id: "trainer1",
     });
     return res.status(200).json(result);
   }

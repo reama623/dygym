@@ -16,6 +16,7 @@ import useCategory from "../../effects/useCategory";
 import { useSWRConfig } from "swr";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import ConfirmModal from "./components/confirm.modal";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -46,6 +47,9 @@ export default function Exercises() {
     type: true,
   });
   const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+  });
+  const [updateModal, setUpdateModal] = useState({
     isOpen: false,
   });
 
@@ -96,6 +100,27 @@ export default function Exercises() {
   const closeDeleteModal = (e) => {
     setDeleteModal({
       ...deleteModal,
+      isOpen: false,
+    });
+  };
+  const openUpdateModal = (e, item, type) => {
+    e.stopPropagation();
+    const newUpdateModal = {
+      isOpen: true,
+      key: type,
+      item,
+    };
+    // if (type === "category") {
+    //   newDeleteModal.submit = deleteCategory;
+    // }
+    // if (type === "exercise") {
+    //   newDeleteModal.submit = deleteExercise;
+    // }
+    setUpdateModal(newUpdateModal);
+  };
+  const closeUpdateModal = (e) => {
+    setUpdateModal({
+      ...updateModal,
       isOpen: false,
     });
   };
@@ -161,19 +186,31 @@ export default function Exercises() {
       await axios.delete(`/category/${seq}`);
       mutate(`/get/category`);
       setSelectCategory(null);
+      enqueueSnackbar("삭제가 완료되었습니다.", { variant: "info" });
     } catch (error) {
       console.log("error", error);
       enqueueSnackbar(
         "삭제가 실패하였습니다. 현상이 지속되면 관리자에게 문의 바랍니다.",
         { variant: "warning" }
       );
-    } finally {
-      enqueueSnackbar("삭제가 완료되었습니다.", { variant: "info" });
     }
   };
-  const updateCategory = (e, item) => {
+  const updateCategory = async (e, item) => {
     e.stopPropagation();
-    alert("update category");
+    const { key } = modal;
+
+    closeModal();
+    closeUpdateModal();
+    try {
+      await axios.patch("/category", { ...input[key] });
+      mutate("/get/category");
+      enqueueSnackbar("수정이 완료되었습니다");
+    } catch (error) {
+      enqueueSnackbar(
+        "수정이 실패했습니다. 현상이 지속되면 관리자에게 문의 바랍니다.",
+        { variant: "error" }
+      );
+    }
   };
 
   const createExercise = async (e) => {
@@ -186,8 +223,21 @@ export default function Exercises() {
 
     mutate(["/get/category/list", selectCategory.seq]);
   };
-  const updateExercise = (e, item) => {
-    alert("update exercise");
+  const updateExercise = async (e) => {
+    const { key } = modal;
+    closeModal();
+    closeUpdateModal();
+
+    try {
+      await axios.patch("/exercise", { ...input[key] });
+      mutate(["/get/category/list", selectCategory.seq]);
+      enqueueSnackbar("수정이 완료되었습니다");
+    } catch (error) {
+      enqueueSnackbar(
+        "수정이 실패했습니다. 현상이 지속되면 관리자에게 문의 바랍니다.",
+        { variant: "error" }
+      );
+    }
   };
   const deleteExercise = async (e, item) => {
     // alert("delete exercise");
@@ -196,17 +246,15 @@ export default function Exercises() {
     mutate(["/get/category/list", selectCategory.seq]);
     try {
       await axios.delete(`/exercise/${modal.item.seq}`);
+      mutate(["/get/category/list", selectCategory.seq]);
+      enqueueSnackbar("삭제가 완료되었습니다.", { variant: "info" });
     } catch (error) {
       console.log("error", error);
       enqueueSnackbar(
         "삭제가 실패하였습니다. 현상이 지속되면 관리자에게 문의 바랍니다.",
         { variant: "warning" }
       );
-    } finally {
-      enqueueSnackbar("삭제가 완료되었습니다.", { variant: "info" });
     }
-
-    mutate(["/get/category/list", selectCategory.seq]);
   };
 
   return (
@@ -324,7 +372,8 @@ export default function Exercises() {
             ) : (
               <Button
                 onClick={
-                  modal.key === "category" ? updateCategory : updateExercise
+                  // modal.key === "category" ? updateCategory : updateExercise
+                  (e) => openUpdateModal(e, modal.item, modal.key)
                 }
                 variant="contained"
               >
@@ -338,7 +387,7 @@ export default function Exercises() {
           </Box>
         </Box>
       </Modal>
-      <Modal
+      {/* <Modal
         open={deleteModal.isOpen}
         onClose={closeDeleteModal}
         aria-labelledby="modal-modal-title"
@@ -359,7 +408,45 @@ export default function Exercises() {
             <Button onClick={closeDeleteModal}>cancel</Button>
           </Box>
         </Box>
-      </Modal>
+      </Modal> */}
+      <ConfirmModal
+        modal={deleteModal}
+        onClose={closeDeleteModal}
+        title={`${deleteModal.item?.title}를(을) 삭제하시겠습니까?`}
+        handleSubmit={
+          deleteModal.key === "category" ? deleteCategory : deleteExercise
+        }
+      />
+      <ConfirmModal
+        modal={updateModal}
+        onClose={closeUpdateModal}
+        title={`${updateModal.item?.title}를(을) 수정하시겠습니까?`}
+        handleSubmit={
+          updateModal.key === "category" ? updateCategory : updateExercise
+        }
+      />
+      {/* <Modal
+        open={updateModal.isOpen}
+        onClose={closeDeleteModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
+            수정하시겠습니까?
+          </Typography>
+          <Box mt={2} display="flex" justifyContent="flex-end">
+            <Button
+              onClick={
+                updateModal.key === "category" ? updateCategory : updateExercise
+              }
+            >
+              ok
+            </Button>
+            <Button onClick={closeUpdateModal}>cancel</Button>
+          </Box>
+        </Box>
+      </Modal> */}
     </>
   );
 }

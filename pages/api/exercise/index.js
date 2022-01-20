@@ -25,6 +25,19 @@ export default async function handler(req, res) {
     }
   }
 
+  if (req.method === "PATCH") {
+    const { seq, title, desc } = body;
+    const {
+      data: { result },
+    } = await apiAxios().patch(`/exercise`, {
+      title,
+      desc,
+      seq,
+      trainer_id: "trainer1",
+    });
+    return res.status(200).json(result);
+  }
+
   if (req.method === "DELETE") {
     const { id } = query;
     try {
