@@ -32,7 +32,8 @@ export default function useCategoryItem(id) {
   );
   return {
     data,
-    isLoading: isValidating,
+    isLoading: !data && !error,
     error,
+    isValidating,
   };
 }

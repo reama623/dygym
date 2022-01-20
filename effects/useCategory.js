@@ -18,7 +18,8 @@ export default function useCategory() {
   });
   return {
     data,
-    isLoading: isValidating,
+    isLoading: !data && !error,
     error,
+    isValidating,
   };
 }

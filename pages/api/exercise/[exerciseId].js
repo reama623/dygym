@@ -16,4 +16,12 @@ export default async function handler(req, res) {
     });
     return res.status(200).json(result);
   }
+
+  if (req.method === "DELETE") {
+    const { exerciseId } = query;
+    const {
+      data: { result },
+    } = await apiAxios().delete(`/exercise/${exerciseId}`);
+    return res.status(200).json(result);
+  }
 }

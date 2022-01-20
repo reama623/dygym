@@ -7,6 +7,7 @@ import {
   Button,
   Modal,
   TextField,
+  CircularProgress,
 } from "@mui/material";
 import CategoryList from "./components/category.list";
 import ExerciseList from "./components/exercises.list";
@@ -37,7 +38,7 @@ const style = {
 
 export default function Exercises() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const { data, isLoading } = useCategory();
+  const { data, isLoading, isValidating } = useCategory();
   const [selectCategory, setSelectCategory] = useState(null);
   const [modal, setModal] = useState({
     isOpen: false,
@@ -76,7 +77,7 @@ export default function Exercises() {
       },
     });
   };
-  console.log(modal, "--");
+
   const openDeleteModal = (e, item, type) => {
     e.stopPropagation();
     const newDeleteModal = {
@@ -153,17 +154,21 @@ export default function Exercises() {
     }
   };
   const deleteCategory = async (e, item) => {
-    // e.stopPropagation();
-    // alert("delete category");
     const { seq } = deleteModal.item;
     try {
-      await axios.delete(`/category/${seq}`);
-      mutate(`/get/category`);
-    } catch (error) {
-      console.log("error", error);
-    } finally {
       closeModal();
       closeDeleteModal();
+      await axios.delete(`/category/${seq}`);
+      mutate(`/get/category`);
+      setSelectCategory(null);
+    } catch (error) {
+      console.log("error", error);
+      enqueueSnackbar(
+        "삭제가 실패하였습니다. 현상이 지속되면 관리자에게 문의 바랍니다.",
+        { variant: "warning" }
+      );
+    } finally {
+      enqueueSnackbar("삭제가 완료되었습니다.", { variant: "info" });
     }
   };
   const updateCategory = (e, item) => {
@@ -173,18 +178,35 @@ export default function Exercises() {
 
   const createExercise = async (e) => {
     // alert("create exercise");
+    setModal({ ...modal, isOpen: false });
     await axios.post("/exercise", {
       ...input.exercise,
       id: selectCategory.seq,
     });
 
-    mutate(`/category/list/${selectCategory.seq}`);
+    mutate(["/get/category/list", selectCategory.seq]);
   };
   const updateExercise = (e, item) => {
-    alert("delete exercise");
-  };
-  const deleteExercise = (e, item) => {
     alert("update exercise");
+  };
+  const deleteExercise = async (e, item) => {
+    // alert("delete exercise");
+    closeModal();
+    closeDeleteModal();
+    mutate(["/get/category/list", selectCategory.seq]);
+    try {
+      await axios.delete(`/exercise/${modal.item.seq}`);
+    } catch (error) {
+      console.log("error", error);
+      enqueueSnackbar(
+        "삭제가 실패하였습니다. 현상이 지속되면 관리자에게 문의 바랍니다.",
+        { variant: "warning" }
+      );
+    } finally {
+      enqueueSnackbar("삭제가 완료되었습니다.", { variant: "info" });
+    }
+
+    mutate(["/get/category/list", selectCategory.seq]);
   };
 
   return (
@@ -198,7 +220,11 @@ export default function Exercises() {
               alignItems="center"
               justifyContent="space-between"
             >
-              <Typography>운동 분류</Typography>
+              <Typography display="flex" alignItems="center">
+                운동 분류
+                {isValidating && <CircularProgress sx={{ ml: 2 }} size={15} />}
+              </Typography>
+
               <Button onClick={(e) => openModal(e, null, "category", true)}>
                 분류 생성
               </Button>
@@ -214,21 +240,8 @@ export default function Exercises() {
         </Grid>
         <Grid item xs={12} md={9} xl={10}>
           <Item>
-            {data && (
-              <Box
-                sx={{ height: 50, pl: 3 }}
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Typography>{selectCategory?.name}</Typography>
-                <Button onClick={(e) => openModal(e, null, "exercise", true)}>
-                  운동 생성
-                </Button>
-              </Box>
-            )}
             {/* <Divider /> */}
-            {selectCategory && data ? (
+            {selectCategory ? (
               <ExerciseList category={selectCategory} openModal={openModal} />
             ) : (
               <Box
@@ -293,6 +306,8 @@ export default function Exercises() {
             {!modal.type && (
               <Button
                 onClick={(e) => openDeleteModal(e, modal.item, modal.key)}
+                color="error"
+                variant="contained"
               >
                 Delete
               </Button>
@@ -302,6 +317,7 @@ export default function Exercises() {
                 onClick={
                   modal.key === "category" ? createCategory : createExercise
                 }
+                variant="contained"
               >
                 ok
               </Button>
@@ -310,12 +326,15 @@ export default function Exercises() {
                 onClick={
                   modal.key === "category" ? updateCategory : updateExercise
                 }
+                variant="contained"
               >
                 update
               </Button>
             )}
 
-            <Button onClick={closeModal}>cancel</Button>
+            <Button onClick={closeModal} variant="contained">
+              cancel
+            </Button>
           </Box>
         </Box>
       </Modal>
