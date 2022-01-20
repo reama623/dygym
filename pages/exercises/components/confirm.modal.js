@@ -15,7 +15,7 @@ const style = {
 export default function ConfirmModal({ modal, onClose, title, handleSubmit }) {
   return (
     <Modal
-      open={modal.isOpen}
+      open={modal?.isOpen}
       onClose={onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"

@@ -23,7 +23,7 @@ export default function ExerciseList({ category, openModal }) {
         justifyContent="space-between"
       >
         <Typography>
-          {category.title}
+          {category?.title}
           {isValidating && <CircularProgress size={16} />}
         </Typography>
         <Button onClick={(e) => openModal(e, null, "exercise", true)}>
