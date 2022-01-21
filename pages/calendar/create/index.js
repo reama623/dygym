@@ -20,21 +20,14 @@ import { useSnackbar } from "notistack";
 import TodayInfo from "./components/todayInfo";
 import ExerciseInfo from "./components/exerciseInfo";
 import TodayExercise from "./components/todayExercise";
-
-const users = [
-  {
-    name: "김지영",
-    userId: "jayden",
-  },
-  {
-    name: "박성일",
-    userId: "park",
-  },
-];
+import useUsers from "../../../effects/useUsers";
 
 export default function Create() {
   const router = useRouter();
   const { date } = router.query;
+
+  const { data: users, isLoading, error } = useUsers("dygym", "trainer1");
+
   // const createDate = date ? formatDate(date, "PPPP") : "날짜 선택";
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -63,7 +56,7 @@ export default function Create() {
 
   const handleExercise = (e, item) => {
     const userExerciseList = [...userExercises];
-    const userExIndex = userExerciseList.findIndex((userEx) => userEx === item);
+    const userExIndex = userExerciseList.findIndex((userEx) => userEx.seq === item.seq);
 
     if (userExIndex !== -1) {
       // userExerciseList.splice(userExIndex, 1);
@@ -72,8 +65,9 @@ export default function Create() {
     } else {
       userExerciseList.push(item);
     }
-
-    setUserExercises([...userExerciseList]);
+    console.log(item)
+    console.log(userExerciseList)
+    // setUserExercises([...userExerciseList]);
   };
   const deleteUserExercise = (e, item) => {
     const userExerciseList = [...userExercises];
@@ -151,11 +145,11 @@ export default function Create() {
         transformOrigin={{ vertical: "center", horizontal: "left" }}
       >
         <List>
-          {users.map((user) => (
+          {users?.map((user, i) => (
             <ListItem
               sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#eee" } }}
               onClick={(e) => handleUserClick(e, user)}
-              key={user.id}
+              key={i}
             >
               {user.name}
             </ListItem>

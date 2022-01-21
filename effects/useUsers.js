@@ -1,17 +1,21 @@
 import axios from "axios";
 import useSWR from "swr";
 
-// const getCategory = async () =>
-//   await axios.get("/category").then(({ data }) => data);
-const getUsers = () => [
-  { id: "user1", name: "김지영" },
-  { id: "user2", name: "박성일" },
-];
+const getAllUser = async (url, group, trainer) => {
+  const { data } = await axios.get(
+    `/user?group_name=${group}&trainer_id=${trainer}`
+  );
+  return data;
+};
 
-export default function useUsers() {
-  const { data, isValidating, error } = useSWR("/get/users", getUsers, {
-    focusThrottleInterval: 60000,
-  });
+export default function useUsers(group, trainer) {
+  const { data, isValidating, error } = useSWR(
+    ["/get/users", group, trainer],
+    getAllUser,
+    {
+      focusThrottleInterval: 60000,
+    }
+  );
   return {
     data,
     isLoading: isValidating,

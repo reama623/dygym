@@ -2,14 +2,11 @@ import { useState } from "react";
 import {
   Box,
   Button,
-  Card,
   CardContent,
   CircularProgress,
-  Grid,
   List,
   ListItem,
   ListItemText,
-  Divider,
   Typography,
 } from "@mui/material";
 import useCategoryItem from "../../../effects/useCategoryItem";
@@ -46,6 +43,7 @@ export default function ExerciseList({ category, openModal }) {
                     backgroundColor: "#eee",
                   },
                 }}
+                onClick={(e) => openModal(e, item, "exercise", false)}
               >
                 <ListItemText
                   primary={item.title}

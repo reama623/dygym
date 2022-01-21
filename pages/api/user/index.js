@@ -6,6 +6,7 @@ import { apiAxios } from "../../../core/api";
 export default async function handler(req, res) {
   const { body, query } = req;
 
+  // 수정 필요
   if (req.method === "POST") {
     const { user_id, exercises } = body;
 
@@ -26,10 +27,11 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "GET") {
+    const { group_name, trainer_id } = query;
     const {
       data: { result },
     } = await apiAxios().get(
-      `/t/exercises?trainer_id=trainer1&group_name=dygym&start_date=2022-01-01&end_date=2022-01-31`
+      `/user/all?group_name=${group_name}&trainer_id=${trainer_id}`
     );
     return res.status(200).json(result);
     // const data = await asyncFunction("select * from t_today_exercises");

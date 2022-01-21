@@ -5,9 +5,7 @@ import {
   Modal,
   Paper,
   Popover,
-  Stack,
   styled,
-  TextField,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
@@ -72,7 +70,7 @@ const events = [
 ];
 
 export default function Calendar() {
-  const { data, isLoading } = useTodayExercises();
+  const { data, isLoading } = useTodayExercises("trainer1");
   const { push } = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElPosition, setAnchorElPosition] = useState({ left: 0, top: 0 });
@@ -116,7 +114,7 @@ export default function Calendar() {
       className: "date-click",
     };
   };
-
+  console.log(data)
   return (
     <>
       <Grid container spacing={2}>
