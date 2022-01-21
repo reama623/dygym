@@ -6,6 +6,10 @@ import {
   CardContent,
   CircularProgress,
   Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
   Typography,
 } from "@mui/material";
 import useCategoryItem from "../../../effects/useCategoryItem";
@@ -13,7 +17,7 @@ import useCategoryItem from "../../../effects/useCategoryItem";
 export default function ExerciseList({ category, openModal }) {
   const [hover, setHover] = useState(0);
   const { data, isLoading, isValidating } = useCategoryItem(category?.seq);
-  
+
   return (
     <>
       <Box
@@ -30,7 +34,46 @@ export default function ExerciseList({ category, openModal }) {
           운동 생성
         </Button>
       </Box>
-      <Grid container>
+      <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+        {data ? (
+          data.map((item, i) => {
+            return (
+              <ListItem
+                key={i}
+                alignItems="flex-start"
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "#eee",
+                  },
+                }}
+              >
+                <ListItemText
+                  primary={item.title}
+                  secondary={
+                    <>
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
+                        {item.desc}
+                      </Typography>
+                    </>
+                  }
+                />
+              </ListItem>
+            );
+          })
+        ) : (
+          <ListItem alignItems="flex-start">
+            <ListItemText primary="운동이 없습니다" />
+          </ListItem>
+        )}
+
+        {/* <Divider variant="inset" component="li" /> */}
+      </List>
+      {/* <Grid container>
         {data?.length > 0 ? (
           data.map((item, i) => (
             <Grid key={i} item xs={3} md={3} xl={2}>
@@ -60,7 +103,7 @@ export default function ExerciseList({ category, openModal }) {
             </Card>
           </Grid>
         )}
-      </Grid>
+      </Grid> */}
     </>
   );
 }
