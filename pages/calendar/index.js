@@ -19,6 +19,9 @@ import { ko } from "date-fns/locale";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useTodayExercises from "../../effects/useTodayExercises";
+import axios from "axios";
+import { useSnackbar } from "notistack";
+import { useSWRConfig } from "swr";
 
 const locales = {
   ko,
@@ -84,6 +87,7 @@ export default function Calendar() {
       className: "date-click",
     };
   };
+
   return (
     <>
       <Grid container spacing={2}>
@@ -172,26 +176,43 @@ const style = {
 
 function DetailExercise({ push, start, info, closePopover }) {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = (e) => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { mutate } = useSWRConfig();
 
-  const { userId, name, exercise } = info;
-  console.log(exercise);
-  const ex_item = exercise ? JSON.parse(exercise) : [];
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { userId, name, exercises } = info;
+
+  const ex_item = exercises ? JSON.parse(exercises) : [];
 
   const selectDate = format(start, "yyyy-MM-dd");
   const handleUpdate = (e) => {
     push(`/calendar/update/${info.userId}?date=${selectDate}`);
   };
-  const handleDelete = (e) => {
-    handleClose();
-    closePopover();
+  const handleDelete = async (e) => {
+    try {
+      handleClose();
+      closePopover();
+      await axios.delete(`/today/${info.seq}`);
+      enqueueSnackbar(
+        `${info.user_name}님의 ${selectDate}일 운동이 삭제되었습니다`,
+        { variant: "info" }
+      );
+      mutate(["/get/today/exercise", "trainer1"]);
+    } catch (error) {
+      enqueueSnackbar(
+        `운동이 삭제 실패, 현상이 지속되면 관리자에게 문의 바랍니다.`,
+        { variant: "error" }
+      );
+    }
   };
+
   return (
     <>
       <Box>
         <Typography pt={1} pl={2} pb={1} variant="h6">
-          {info.name} 회원 <Typography>{selectDate}의 운동</Typography>
+          {info.user_name} 회원 <Typography>{selectDate}의 운동</Typography>
         </Typography>
         <Divider />
         <Box p={2} width={350}>
@@ -250,7 +271,9 @@ function DetailExercise({ push, start, info, closePopover }) {
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2" mb={3}>
             {selectDate}
-            <Typography>{info.name}님의 운동을 삭제하시겠습니까?</Typography>
+            <Typography>
+              {info.user_name}님의 운동을 삭제하시겠습니까?
+            </Typography>
           </Typography>
           <Box display="flex" justifyContent="flex-end">
             <Button
