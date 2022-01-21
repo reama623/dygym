@@ -2,6 +2,9 @@ import {
   Button,
   Divider,
   Grid,
+  List,
+  ListItem,
+  ListItemText,
   Modal,
   Paper,
   Popover,
@@ -35,39 +38,6 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
-
-const events = [
-  {
-    title: "김지영",
-    start: new Date("2022", "0", "10"),
-    end: new Date("2022", "0", "10"),
-    info: {
-      userId: "kim",
-      name: "김지영",
-      exercise: {},
-    },
-  },
-  {
-    title: "박성일",
-    start: new Date("2022", "0", "10"),
-    end: new Date("2022", "0", "10"),
-    info: {
-      userId: "park",
-      name: "박성일",
-      exercise: {},
-    },
-  },
-  {
-    title: "박성일",
-    start: new Date("2022", "0", "11"),
-    end: new Date("2022", "0", "11"),
-    info: {
-      userId: "park",
-      name: "박성일",
-      exercise: {},
-    },
-  },
-];
 
 export default function Calendar() {
   const { data, isLoading } = useTodayExercises("trainer1");
@@ -114,7 +84,6 @@ export default function Calendar() {
       className: "date-click",
     };
   };
-  console.log(data)
   return (
     <>
       <Grid container spacing={2}>
@@ -206,6 +175,10 @@ function DetailExercise({ push, start, info, closePopover }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const { userId, name, exercise } = info;
+  console.log(exercise);
+  const ex_item = exercise ? JSON.parse(exercise) : [];
+
   const selectDate = format(start, "yyyy-MM-dd");
   const handleUpdate = (e) => {
     push(`/calendar/update/${info.userId}?date=${selectDate}`);
@@ -237,7 +210,14 @@ function DetailExercise({ push, start, info, closePopover }) {
             </Box>
           </Grid> */}
             <Grid item xs={12}>
-              운동 만들기
+              <List dense>
+                {ex_item &&
+                  ex_item?.map((item) => (
+                    <ListItem key={item.seq}>
+                      <ListItemText>{item.title}</ListItemText>
+                    </ListItem>
+                  ))}
+              </List>
             </Grid>
             <Grid item xs={12}>
               <Box display="flex" justifyContent="flex-end">

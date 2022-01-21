@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useRouter } from "next/router";
 import {
@@ -14,6 +14,7 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
+import { format } from "date-fns";
 
 import { Save as SaveIcon, Cancel as CancelIcon } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
@@ -21,6 +22,7 @@ import TodayInfo from "./components/todayInfo";
 import ExerciseInfo from "./components/exerciseInfo";
 import TodayExercise from "./components/todayExercise";
 import useUsers from "../../../effects/useUsers";
+import axios from "axios";
 
 export default function Create() {
   const router = useRouter();
@@ -36,11 +38,39 @@ export default function Create() {
 
   const [userExercises, setUserExercises] = useState([]);
 
+  const [cal, setCal] = useState(new Date());
+
+  const handleDateChange = (newValue) => {
+    setCal(newValue);
+  };
+
   const handleCategory = (e, item) => {
     setCategory(item);
   };
   const handleCancelExercise = (e) => {
     setCategory(null);
+  };
+
+  const createTodayExercise = async (e) => {
+    if (!userExercises.length) {
+      enqueueSnackbar("운동을 선택해주세요", { variant: "error" });
+      return;
+    }
+    if (user == null) {
+      enqueueSnackbar("회원을 선택해주세요", { variant: "error" });
+      return;
+    }
+    const item = {
+      exercises: JSON.stringify(userExercises),
+      exercise_date: format(cal, "yyyy-MM-dd"),
+      user_id: user.id,
+      trainer_id: user.trainer_id,
+      group_name: user.group_name,
+    };
+
+    await axios.post("/today", { ...item });
+
+    router.push("/calendar");
   };
 
   const [cancelOpen, setCancelOpen] = useState(false);
@@ -54,9 +84,23 @@ export default function Create() {
     router.push("/calendar");
   };
 
+  const handleExerciseItem = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      const [, seq] = name.split("-");
+      const copyExercises = [...userExercises];
+      const findExercise = copyExercises.find((ex) => ex.seq === +seq);
+      findExercise.value = value;
+      setUserExercises(copyExercises);
+    },
+    [date, userExercises]
+  );
+
   const handleExercise = (e, item) => {
     const userExerciseList = [...userExercises];
-    const userExIndex = userExerciseList.findIndex((userEx) => userEx.seq === item.seq);
+    const userExIndex = userExerciseList.findIndex(
+      (userEx) => userEx.seq === item.seq
+    );
 
     if (userExIndex !== -1) {
       // userExerciseList.splice(userExIndex, 1);
@@ -65,20 +109,13 @@ export default function Create() {
     } else {
       userExerciseList.push(item);
     }
-    console.log(item)
-    console.log(userExerciseList)
-    // setUserExercises([...userExerciseList]);
+    setUserExercises([...userExerciseList]);
   };
   const deleteUserExercise = (e, item) => {
     const userExerciseList = [...userExercises];
     const userExIndex = userExerciseList.findIndex((userEx) => userEx === item);
     userExerciseList.splice(userExIndex, 1);
     setUserExercises([...userExerciseList]);
-  };
-
-  const [cal, setCal] = useState(new Date());
-  const handleDateChange = (newValue) => {
-    setCal(newValue);
   };
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -120,7 +157,7 @@ export default function Create() {
             >
               <CancelIcon />
             </Button>
-            <Button variant="contained">
+            <Button variant="contained" onClick={createTodayExercise}>
               <SaveIcon />
             </Button>
           </Box>
@@ -133,6 +170,7 @@ export default function Create() {
         />
         <TodayExercise
           userExercises={userExercises}
+          handleExerciseItem={handleExerciseItem}
           deleteUserExercise={deleteUserExercise}
         />
       </Grid>

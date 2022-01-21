@@ -9,11 +9,7 @@ export default function ExerciseInfo({
   handleCancelExercise,
 }) {
   const { data, isValidating, isLoading, error } = useCategory();
-  const {
-    data: exercises,
-    isLoading: exerciseLoading,
-    error: exerciseError,
-  } = useCategoryItem(category?.seq);
+
   return (
     <Grid item xs={12}>
       <Typography mt={2} mb={1} display="flex" alignItems="center">
@@ -62,20 +58,27 @@ export default function ExerciseInfo({
       )}
 
       {category != null && (
-        <Box>
-          {exercises?.map((exercise) => (
-            <Button
-              key={exercise.seq}
-              sx={{ m: 1 }}
-              variant="contained"
-              color="secondary"
-              onClick={(e) => handleExercise(e, exercise)}
-            >
-              {exercise.title}
-            </Button>
-          ))}
-        </Box>
+        <ExerciseList category={category} handleExercise={handleExercise} />
       )}
     </Grid>
+  );
+}
+
+function ExerciseList({ handleExercise }) {
+  const { data, isLoading, error } = useCategoryItem(category?.seq);
+  return (
+    <Box>
+      {data?.map((exercise) => (
+        <Button
+          key={exercise.seq}
+          sx={{ m: 1 }}
+          variant="contained"
+          color="secondary"
+          onClick={(e) => handleExercise(e, exercise)}
+        >
+          {exercise.title}
+        </Button>
+      ))}
+    </Box>
   );
 }

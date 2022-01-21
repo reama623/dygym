@@ -7,16 +7,9 @@ export default async function handler(req, res) {
   const { body, query } = req;
 
   if (req.method === "POST") {
-    const { user_id, exercises } = body;
-
     try {
       await apiAxios().post(`/t/exercises`, {
-        trainer_id: 0,
-        group_id: 0,
-        exercises,
-        created_user: 1,
-        updated_user: 1,
-        user_id: 0,
+        ...body,
       });
       return res.status(201).json({ status: true, message: "create success" });
     } catch (error) {

@@ -30,7 +30,7 @@ function converting(items) {
         end: new Date(item.exercise_date),
         info: {
           userId: item.user_id,
-          name: item.user_id,
+          name: item.name,
           exercise: item.exercises,
         },
       };
