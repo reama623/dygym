@@ -64,7 +64,7 @@ export default function ExerciseInfo({
   );
 }
 
-function ExerciseList({ handleExercise }) {
+function ExerciseList({ category, handleExercise }) {
   const { data, isLoading, error } = useCategoryItem(category?.seq);
   return (
     <Box>
