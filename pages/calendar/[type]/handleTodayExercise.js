@@ -244,17 +244,18 @@ export default function HandleTodayExercise({ item }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users.map((user) => (
-                <TableRow
-                  key={user.seq}
-                  sx={{ "&:hover": { backgroundColor: "#eee" } }}
-                  onClick={(e) => handleUserClick(e, user)}
-                >
-                  <TableCell component="th" scope="row">
-                    {user.name}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {users &&
+                users.map((user) => (
+                  <TableRow
+                    key={user.seq}
+                    sx={{ "&:hover": { backgroundColor: "#eee" } }}
+                    onClick={(e) => handleUserClick(e, user)}
+                  >
+                    <TableCell component="th" scope="row">
+                      {user.name}
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </DialogContent>
