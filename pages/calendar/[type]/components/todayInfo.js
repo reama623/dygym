@@ -4,7 +4,7 @@ import { LocalizationProvider, DesktopDatePicker } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import { useRouter } from "next/router";
 
-export default function TodayInfo({ user, cal, handleDateChange, openAnchor }) {
+export default function TodayInfo({ user, cal, handleDateChange, openModal }) {
   const {
     query: { type },
   } = useRouter();
@@ -30,7 +30,7 @@ export default function TodayInfo({ user, cal, handleDateChange, openAnchor }) {
         <Button
           variant="contained"
           sx={{ mr: 2 }}
-          onClick={openAnchor}
+          onClick={openModal}
           disabled={type === "update"}
         >
           {user != null ? user.name : "회원"}

@@ -5,14 +5,16 @@ import {
   Grid,
   Box,
   Button,
-  Popover,
-  List,
-  ListItem,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
 } from "@mui/material";
 import { format } from "date-fns";
 
@@ -81,6 +83,10 @@ export default function HandleTodayExercise({ item }) {
     push("/calendar");
   };
 
+  const [userModal, setUserModal] = useState(false);
+  const handleUserModalOpen = (e) => setUserModal(true);
+  const handleUserModalClose = (e) => setUserModal(false);
+
   const [cancelOpen, setCancelOpen] = useState(false);
   const cancelCreate = (e) => {
     setCancelOpen(true);
@@ -138,7 +144,7 @@ export default function HandleTodayExercise({ item }) {
 
   const handleUserClick = (e, item) => {
     setUser(item);
-    closeAnchor();
+    handleUserModalClose();
   };
   useEffect(() => {
     if (date) {
@@ -160,7 +166,7 @@ export default function HandleTodayExercise({ item }) {
           cal={cal}
           user={user}
           handleDateChange={handleDateChange}
-          openAnchor={openAnchor}
+          openModal={handleUserModalOpen}
         />
         <Grid item xs={3}>
           <Box display="flex">
@@ -189,26 +195,6 @@ export default function HandleTodayExercise({ item }) {
           deleteUserExercise={deleteUserExercise}
         />
       </Grid>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={closeAnchor}
-        anchorOrigin={{ vertical: "center", horizontal: "right" }}
-        transformOrigin={{ vertical: "center", horizontal: "left" }}
-      >
-        <List>
-          {users?.map((user, i) => (
-            <ListItem
-              sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#eee" } }}
-              onClick={(e) => handleUserClick(e, user)}
-              key={i}
-            >
-              {user.name}
-            </ListItem>
-          ))}
-        </List>
-      </Popover>
       <Dialog
         open={cancelOpen}
         onClose={closeCancel}
@@ -237,8 +223,8 @@ export default function HandleTodayExercise({ item }) {
       </Dialog>
 
       <Dialog
-        // open={cancelOpen}
-        // onClose={closeCancel}
+        open={userModal}
+        onClose={handleUserModalClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -247,6 +233,30 @@ export default function HandleTodayExercise({ item }) {
           <DialogContentText id="alert-dialog-description">
             회원을 선택해주세요
           </DialogContentText>
+          <Table
+            sx={{ minWidth: 250, maxHeight: 500 }}
+            size="small"
+            aria-label="a dense table"
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell>이름</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users.map((user) => (
+                <TableRow
+                  key={user.seq}
+                  sx={{ "&:hover": { backgroundColor: "#eee" } }}
+                  onClick={(e) => handleUserClick(e, user)}
+                >
+                  <TableCell component="th" scope="row">
+                    {user.name}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </DialogContent>
       </Dialog>
     </>
