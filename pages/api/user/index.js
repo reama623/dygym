@@ -31,7 +31,7 @@ export default async function handler(req, res) {
     const {
       data: { result },
     } = await apiAxios().get(
-      `/user/all?group_name=${group_name}&trainer_id=${trainer_id}`
+      `/user/management?group_name=${group_name}&trainer_id=${trainer_id}`
     );
     return res.status(200).json(result);
     // const data = await asyncFunction("select * from t_today_exercises");

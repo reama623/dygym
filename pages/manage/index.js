@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import useUsers from "../../effects/useUsers";
 
 const style = {
   position: "absolute",
@@ -33,6 +34,7 @@ const style = {
 
 export default function Manage() {
   const router = useRouter();
+  const { data, isLoading, error } = useUsers("dygym", "trainer1");
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -61,22 +63,17 @@ export default function Manage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow
-                sx={{ "&:hover": { backgroundColor: "#eee" } }}
-                onClick={(e) => handleRow(e, "jayden")}
-              >
-                <TableCell align="center">김지영</TableCell>
-                <TableCell align="center">인준혁</TableCell>
-                <TableCell align="center">DYGYM</TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:hover": { backgroundColor: "#eee" } }}
-                onClick={(e) => handleRow(e, "park")}
-              >
-                <TableCell align="center">박성일</TableCell>
-                <TableCell align="center">-</TableCell>
-                <TableCell align="center">-</TableCell>
-              </TableRow>
+              {data &&
+                data.map((d) => (
+                  <TableRow
+                    sx={{ "&:hover": { backgroundColor: "#eee" } }}
+                    onClick={(e) => handleRow(e, "jayden")}
+                  >
+                    <TableCell align="center">{d.name}</TableCell>
+                    <TableCell align="center">{d.trainer_name}</TableCell>
+                    <TableCell align="center">{d.group_name}</TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
