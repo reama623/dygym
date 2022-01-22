@@ -66,6 +66,7 @@ export default function Manage() {
               {data &&
                 data.map((d) => (
                   <TableRow
+                    key={d.seq}
                     sx={{ "&:hover": { backgroundColor: "#eee" } }}
                     onClick={(e) => handleRow(e, "jayden")}
                   >
