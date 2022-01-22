@@ -1,12 +1,12 @@
 import axios from "axios";
 import useSWR from "swr";
 
-const getTodayExercises = async (url, id) =>
-  await axios.get("/today").then(({ data }) => data);
+const getTodayExercises = async (url, trainer_id) =>
+  await axios.get(`/today?trainer_id=${trainer_id}`).then(({ data }) => data);
 
 export default function useTodayExercises(trainerId) {
   const { data, isValidating, error } = useSWR(
-    ["/get/today/exercise", trainerId],
+    ["/get/today/exercises", trainerId],
     getTodayExercises,
     {
       focusThrottleInterval: 60000,

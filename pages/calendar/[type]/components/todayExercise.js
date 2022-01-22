@@ -23,6 +23,7 @@ export default function TodayExercise({
                 onChange={handleExerciseItem}
                 name={`exercise-${exercise.seq}`}
                 size="small"
+                value={exercise.value}
                 sx={{ mr: 2, width: "100%" }}
               />
             </Grid>

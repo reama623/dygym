@@ -5,10 +5,16 @@ import { apiAxios } from "../../../core/api";
 
 export default async function handler(req, res) {
   const { body, query } = req;
-
+  const { id } = query;
   if (req.method === "DELETE") {
-    const { id } = query;
     const { data } = await apiAxios().delete(`/t/exercises/${id}`);
     return res.status(200).json(data);
+  }
+
+  if (req.method === "GET") {
+    const {
+      data: { result },
+    } = await apiAxios().get(`/t/exercises/${id}`);
+    return res.status(200).json(result);
   }
 }

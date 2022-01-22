@@ -12,18 +12,22 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    const { title, desc } = body;
-    const {
-      data: { result },
-    } = await apiAxios().post("/category", {
-      title,
-      desc,
-      group_name: "dygym",
-      trainer_id: "trainer1",
-      created_user: "admin",
-      updated_user: "admin",
-    });
-    return res.status(200).json(result);
+    try {
+      const { title, desc } = body;
+      const {
+        data: { result },
+      } = await apiAxios().post("/category", {
+        title,
+        desc,
+        group_name: "dygym",
+        trainer_id: "trainer1",
+        created_user: "admin",
+        updated_user: "admin",
+      });
+      return res.status(200).json(result);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
   }
 
   if (req.method === "PATCH") {

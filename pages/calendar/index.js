@@ -87,7 +87,7 @@ export default function Calendar() {
       className: "date-click",
     };
   };
-
+  
   return (
     <>
       <Grid container spacing={2}>
@@ -182,13 +182,14 @@ function DetailExercise({ push, start, info, closePopover }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { userId, name, exercises } = info;
+  const { user_id, name, exercises, seq, trainer_id } = info;
 
   const ex_item = exercises ? JSON.parse(exercises) : [];
 
   const selectDate = format(start, "yyyy-MM-dd");
   const handleUpdate = (e) => {
-    push(`/calendar/update/${info.userId}?date=${selectDate}`);
+    push(`/calendar/update/${seq}`);
+    return;
   };
   const handleDelete = async (e) => {
     try {

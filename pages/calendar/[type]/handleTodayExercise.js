@@ -21,12 +21,14 @@ import { useSnackbar } from "notistack";
 import TodayInfo from "./components/todayInfo";
 import ExerciseInfo from "./components/exerciseInfo";
 import TodayExercise from "./components/todayExercise";
-import useUsers from "../../../effects/useUsers";
 import axios from "axios";
+import useUsers from "../../../effects/useUsers";
 
-export default function Create() {
-  const router = useRouter();
-  const { date } = router.query;
+export default function HandleTodayExercise({ item }) {
+  const {
+    query: { date, type },
+    push,
+  } = useRouter();
 
   const { data: users, isLoading, error } = useUsers("dygym", "trainer1");
 
@@ -51,7 +53,7 @@ export default function Create() {
     setCategory(null);
   };
 
-  const createTodayExercise = async (e) => {
+  const submitTodayExercise = async (e) => {
     if (!userExercises.length) {
       enqueueSnackbar("운동을 선택해주세요", { variant: "error" });
       return;
@@ -60,7 +62,8 @@ export default function Create() {
       enqueueSnackbar("회원을 선택해주세요", { variant: "error" });
       return;
     }
-    const item = {
+    const pack = {
+      seq: item.seq,
       exercises: JSON.stringify(userExercises),
       exercise_date: format(cal, "yyyy-MM-dd"),
       user_id: user.id,
@@ -68,9 +71,14 @@ export default function Create() {
       group_name: user.group_name,
     };
 
-    await axios.post("/today", { ...item });
+    if (type === "create") {
+      await axios.post("/today", { ...pack });
+    }
+    if (type === "update") {
+      await axios.patch("/today", { ...pack });
+    }
 
-    router.push("/calendar");
+    push("/calendar");
   };
 
   const [cancelOpen, setCancelOpen] = useState(false);
@@ -81,7 +89,7 @@ export default function Create() {
     setCancelOpen(false);
   };
   const closeOk = (e) => {
-    router.push("/calendar");
+    push("/calendar");
   };
 
   const handleExerciseItem = useCallback(
@@ -138,6 +146,13 @@ export default function Create() {
     }
   }, [date]);
 
+  useEffect(() => {
+    if (item && users.length) {
+      const user = users.find((u) => u.id === item.user_id);
+      setUser(user);
+      setUserExercises(JSON.parse(item.exercises));
+    }
+  }, [item, users]);
   return (
     <>
       <Grid container spacing={2}>
@@ -157,7 +172,7 @@ export default function Create() {
             >
               <CancelIcon />
             </Button>
-            <Button variant="contained" onClick={createTodayExercise}>
+            <Button variant="contained" onClick={submitTodayExercise}>
               <SaveIcon />
             </Button>
           </Box>
@@ -219,6 +234,20 @@ export default function Create() {
             삭제
           </Button>
         </DialogActions>
+      </Dialog>
+
+      <Dialog
+        // open={cancelOpen}
+        // onClose={closeCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">회원 선택</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            회원을 선택해주세요
+          </DialogContentText>
+        </DialogContent>
       </Dialog>
     </>
   );
